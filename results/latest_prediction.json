@@ -1,0 +1,34 @@
+{
+    "model": "LARA Land Cover CNN",
+    "image": "D:\\lara-project\\cnn\\dataset\\Pasture\\Pasture_1.jpg",
+    "original_image_size": {
+        "width": 64,
+        "height": 64
+    },
+    "prediction": {
+        "class": "Pasture",
+        "confidence": 0.9995996356010437
+    },
+    "top_predictions": [
+        {
+            "class": "Pasture",
+            "confidence": 0.9995996356010437
+        },
+        {
+            "class": "PermanentCrop",
+            "confidence": 0.0003744355926755816
+        },
+        {
+            "class": "AnnualCrop",
+            "confidence": 1.9366907508810982e-05
+        },
+        {
+            "class": "Highway",
+            "confidence": 2.5505303256068146e-06
+        },
+        {
+            "class": "River",
+            "confidence": 1.882379820017377e-06
+        }
+    ]
+}

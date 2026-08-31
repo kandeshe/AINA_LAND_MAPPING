@@ -1,0 +1,1911 @@
+{
+    "model": "LARA Land Cover CNN",
+    "source_image": "D:\\lara-project\\data\\satellite\\RGB\\rgb_preview.jpg",
+    "image_size": {
+        "width": 1024,
+        "height": 1024
+    },
+    "tile_size": 64,
+    "total_tiles": 256,
+    "dominant_land_cover": "AnnualCrop",
+    "dominant_coverage_percent": 30.859375,
+    "average_prediction_confidence": 0.8150984048843384,
+    "class_distribution": [
+        {
+            "class": "AnnualCrop",
+            "tiles": 79,
+            "percentage": 30.859375,
+            "average_confidence": 0.8223268480240544
+        },
+        {
+            "class": "Forest",
+            "tiles": 3,
+            "percentage": 1.171875,
+            "average_confidence": 0.6485463579495748
+        },
+        {
+            "class": "HerbaceousVegetation",
+            "tiles": 7,
+            "percentage": 2.734375,
+            "average_confidence": 0.68980644430433
+        },
+        {
+            "class": "Highway",
+            "tiles": 1,
+            "percentage": 0.390625,
+            "average_confidence": 0.5770896077156067
+        },
+        {
+            "class": "Industrial",
+            "tiles": 46,
+            "percentage": 17.96875,
+            "average_confidence": 0.8920843406863834
+        },
+        {
+            "class": "Pasture",
+            "tiles": 2,
+            "percentage": 0.78125,
+            "average_confidence": 0.698285311460495
+        },
+        {
+            "class": "PermanentCrop",
+            "tiles": 38,
+            "percentage": 14.84375,
+            "average_confidence": 0.7562968511330453
+        },
+        {
+            "class": "Residential",
+            "tiles": 0,
+            "percentage": 0.0,
+            "average_confidence": 0.0
+        },
+        {
+            "class": "River",
+            "tiles": 62,
+            "percentage": 24.21875,
+            "average_confidence": 0.8277893835498441
+        },
+        {
+            "class": "SeaLake",
+            "tiles": 18,
+            "percentage": 7.03125,
+            "average_confidence": 0.7697397801611159
+        }
+    ],
+    "scene_class_scores": [
+        {
+            "class": "AnnualCrop",
+            "score": 0.29609549045562744
+        },
+        {
+            "class": "River",
+            "score": 0.2429027557373047
+        },
+        {
+            "class": "Industrial",
+            "score": 0.18554039299488068
+        },
+        {
+            "class": "PermanentCrop",
+            "score": 0.1489209085702896
+        },
+        {
+            "class": "SeaLake",
+            "score": 0.06683439761400223
+        },
+        {
+            "class": "HerbaceousVegetation",
+            "score": 0.025900505483150482
+        },
+        {
+            "class": "Forest",
+            "score": 0.011896675452589989
+        },
+        {
+            "class": "Highway",
+            "score": 0.011293827556073666
+        },
+        {
+            "class": "Pasture",
+            "score": 0.010606209747493267
+        },
+        {
+            "class": "Residential",
+            "score": 8.824617907521315e-06
+        }
+    ],
+    "tile_predictions": [
+        {
+            "tile": 1,
+            "x": 0,
+            "y": 0,
+            "prediction": "River",
+            "confidence": 0.9923592209815979
+        },
+        {
+            "tile": 2,
+            "x": 64,
+            "y": 0,
+            "prediction": "Industrial",
+            "confidence": 0.9931430816650391
+        },
+        {
+            "tile": 3,
+            "x": 128,
+            "y": 0,
+            "prediction": "SeaLake",
+            "confidence": 0.9967933297157288
+        },
+        {
+            "tile": 4,
+            "x": 192,
+            "y": 0,
+            "prediction": "Industrial",
+            "confidence": 0.9996762275695801
+        },
+        {
+            "tile": 5,
+            "x": 256,
+            "y": 0,
+            "prediction": "River",
+            "confidence": 0.9999971389770508
+        },
+        {
+            "tile": 6,
+            "x": 320,
+            "y": 0,
+            "prediction": "River",
+            "confidence": 0.999901294708252
+        },
+        {
+            "tile": 7,
+            "x": 384,
+            "y": 0,
+            "prediction": "River",
+            "confidence": 0.5550129413604736
+        },
+        {
+            "tile": 8,
+            "x": 448,
+            "y": 0,
+            "prediction": "SeaLake",
+            "confidence": 0.9991993308067322
+        },
+        {
+            "tile": 9,
+            "x": 512,
+            "y": 0,
+            "prediction": "SeaLake",
+            "confidence": 0.9893265962600708
+        },
+        {
+            "tile": 10,
+            "x": 576,
+            "y": 0,
+            "prediction": "Forest",
+            "confidence": 0.893477201461792
+        },
+        {
+            "tile": 11,
+            "x": 640,
+            "y": 0,
+            "prediction": "SeaLake",
+            "confidence": 0.9241100549697876
+        },
+        {
+            "tile": 12,
+            "x": 704,
+            "y": 0,
+            "prediction": "AnnualCrop",
+            "confidence": 0.6467893123626709
+        },
+        {
+            "tile": 13,
+            "x": 768,
+            "y": 0,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9963550567626953
+        },
+        {
+            "tile": 14,
+            "x": 832,
+            "y": 0,
+            "prediction": "AnnualCrop",
+            "confidence": 0.8216496109962463
+        },
+        {
+            "tile": 15,
+            "x": 896,
+            "y": 0,
+            "prediction": "AnnualCrop",
+            "confidence": 0.4961305558681488
+        },
+        {
+            "tile": 16,
+            "x": 960,
+            "y": 0,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9977145195007324
+        },
+        {
+            "tile": 17,
+            "x": 0,
+            "y": 64,
+            "prediction": "AnnualCrop",
+            "confidence": 0.4817827641963959
+        },
+        {
+            "tile": 18,
+            "x": 64,
+            "y": 64,
+            "prediction": "River",
+            "confidence": 0.9387985467910767
+        },
+        {
+            "tile": 19,
+            "x": 128,
+            "y": 64,
+            "prediction": "Industrial",
+            "confidence": 0.6236920952796936
+        },
+        {
+            "tile": 20,
+            "x": 192,
+            "y": 64,
+            "prediction": "River",
+            "confidence": 0.9988324046134949
+        },
+        {
+            "tile": 21,
+            "x": 256,
+            "y": 64,
+            "prediction": "AnnualCrop",
+            "confidence": 0.5640141367912292
+        },
+        {
+            "tile": 22,
+            "x": 320,
+            "y": 64,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9548519253730774
+        },
+        {
+            "tile": 23,
+            "x": 384,
+            "y": 64,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9220525026321411
+        },
+        {
+            "tile": 24,
+            "x": 448,
+            "y": 64,
+            "prediction": "SeaLake",
+            "confidence": 0.8655673861503601
+        },
+        {
+            "tile": 25,
+            "x": 512,
+            "y": 64,
+            "prediction": "SeaLake",
+            "confidence": 0.49067413806915283
+        },
+        {
+            "tile": 26,
+            "x": 576,
+            "y": 64,
+            "prediction": "AnnualCrop",
+            "confidence": 0.5718933939933777
+        },
+        {
+            "tile": 27,
+            "x": 640,
+            "y": 64,
+            "prediction": "River",
+            "confidence": 0.4636203646659851
+        },
+        {
+            "tile": 28,
+            "x": 704,
+            "y": 64,
+            "prediction": "AnnualCrop",
+            "confidence": 0.5413298010826111
+        },
+        {
+            "tile": 29,
+            "x": 768,
+            "y": 64,
+            "prediction": "AnnualCrop",
+            "confidence": 0.7692441344261169
+        },
+        {
+            "tile": 30,
+            "x": 832,
+            "y": 64,
+            "prediction": "AnnualCrop",
+            "confidence": 0.6341097354888916
+        },
+        {
+            "tile": 31,
+            "x": 896,
+            "y": 64,
+            "prediction": "HerbaceousVegetation",
+            "confidence": 0.6988414525985718
+        },
+        {
+            "tile": 32,
+            "x": 960,
+            "y": 64,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9853441119194031
+        },
+        {
+            "tile": 33,
+            "x": 0,
+            "y": 128,
+            "prediction": "SeaLake",
+            "confidence": 0.9998258948326111
+        },
+        {
+            "tile": 34,
+            "x": 64,
+            "y": 128,
+            "prediction": "River",
+            "confidence": 0.5300431251525879
+        },
+        {
+            "tile": 35,
+            "x": 128,
+            "y": 128,
+            "prediction": "River",
+            "confidence": 0.9436413049697876
+        },
+        {
+            "tile": 36,
+            "x": 192,
+            "y": 128,
+            "prediction": "River",
+            "confidence": 0.6316918730735779
+        },
+        {
+            "tile": 37,
+            "x": 256,
+            "y": 128,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9886510372161865
+        },
+        {
+            "tile": 38,
+            "x": 320,
+            "y": 128,
+            "prediction": "AnnualCrop",
+            "confidence": 0.8954179286956787
+        },
+        {
+            "tile": 39,
+            "x": 384,
+            "y": 128,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9991003274917603
+        },
+        {
+            "tile": 40,
+            "x": 448,
+            "y": 128,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9973708391189575
+        },
+        {
+            "tile": 41,
+            "x": 512,
+            "y": 128,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9992863535881042
+        },
+        {
+            "tile": 42,
+            "x": 576,
+            "y": 128,
+            "prediction": "AnnualCrop",
+            "confidence": 0.8154540657997131
+        },
+        {
+            "tile": 43,
+            "x": 640,
+            "y": 128,
+            "prediction": "SeaLake",
+            "confidence": 0.628934383392334
+        },
+        {
+            "tile": 44,
+            "x": 704,
+            "y": 128,
+            "prediction": "HerbaceousVegetation",
+            "confidence": 0.7619262337684631
+        },
+        {
+            "tile": 45,
+            "x": 768,
+            "y": 128,
+            "prediction": "HerbaceousVegetation",
+            "confidence": 0.8076174855232239
+        },
+        {
+            "tile": 46,
+            "x": 832,
+            "y": 128,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9629427194595337
+        },
+        {
+            "tile": 47,
+            "x": 896,
+            "y": 128,
+            "prediction": "PermanentCrop",
+            "confidence": 0.5268653631210327
+        },
+        {
+            "tile": 48,
+            "x": 960,
+            "y": 128,
+            "prediction": "SeaLake",
+            "confidence": 0.3545416593551636
+        },
+        {
+            "tile": 49,
+            "x": 0,
+            "y": 192,
+            "prediction": "SeaLake",
+            "confidence": 0.915805995464325
+        },
+        {
+            "tile": 50,
+            "x": 64,
+            "y": 192,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9138702750205994
+        },
+        {
+            "tile": 51,
+            "x": 128,
+            "y": 192,
+            "prediction": "PermanentCrop",
+            "confidence": 0.9209975600242615
+        },
+        {
+            "tile": 52,
+            "x": 192,
+            "y": 192,
+            "prediction": "AnnualCrop",
+            "confidence": 0.6625845432281494
+        },
+        {
+            "tile": 53,
+            "x": 256,
+            "y": 192,
+            "prediction": "AnnualCrop",
+            "confidence": 0.946953535079956
+        },
+        {
+            "tile": 54,
+            "x": 320,
+            "y": 192,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9427354335784912
+        },
+        {
+            "tile": 55,
+            "x": 384,
+            "y": 192,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9212915897369385
+        },
+        {
+            "tile": 56,
+            "x": 448,
+            "y": 192,
+            "prediction": "AnnualCrop",
+            "confidence": 0.999607503414154
+        },
+        {
+            "tile": 57,
+            "x": 512,
+            "y": 192,
+            "prediction": "AnnualCrop",
+            "confidence": 0.8359255194664001
+        },
+        {
+            "tile": 58,
+            "x": 576,
+            "y": 192,
+            "prediction": "HerbaceousVegetation",
+            "confidence": 0.9032487869262695
+        },
+        {
+            "tile": 59,
+            "x": 640,
+            "y": 192,
+            "prediction": "PermanentCrop",
+            "confidence": 0.9631322026252747
+        },
+        {
+            "tile": 60,
+            "x": 704,
+            "y": 192,
+            "prediction": "HerbaceousVegetation",
+            "confidence": 0.5513869524002075
+        },
+        {
+            "tile": 61,
+            "x": 768,
+            "y": 192,
+            "prediction": "HerbaceousVegetation",
+            "confidence": 0.4067921042442322
+        },
+        {
+            "tile": 62,
+            "x": 832,
+            "y": 192,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9105032682418823
+        },
+        {
+            "tile": 63,
+            "x": 896,
+            "y": 192,
+            "prediction": "AnnualCrop",
+            "confidence": 0.38636377453804016
+        },
+        {
+            "tile": 64,
+            "x": 960,
+            "y": 192,
+            "prediction": "AnnualCrop",
+            "confidence": 0.3846982419490814
+        },
+        {
+            "tile": 65,
+            "x": 0,
+            "y": 256,
+            "prediction": "Forest",
+            "confidence": 0.5409427285194397
+        },
+        {
+            "tile": 66,
+            "x": 64,
+            "y": 256,
+            "prediction": "HerbaceousVegetation",
+            "confidence": 0.698832094669342
+        },
+        {
+            "tile": 67,
+            "x": 128,
+            "y": 256,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9777194261550903
+        },
+        {
+            "tile": 68,
+            "x": 192,
+            "y": 256,
+            "prediction": "AnnualCrop",
+            "confidence": 0.991905689239502
+        },
+        {
+            "tile": 69,
+            "x": 256,
+            "y": 256,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9977532029151917
+        },
+        {
+            "tile": 70,
+            "x": 320,
+            "y": 256,
+            "prediction": "AnnualCrop",
+            "confidence": 0.8015673756599426
+        },
+        {
+            "tile": 71,
+            "x": 384,
+            "y": 256,
+            "prediction": "AnnualCrop",
+            "confidence": 0.7255275249481201
+        },
+        {
+            "tile": 72,
+            "x": 448,
+            "y": 256,
+            "prediction": "PermanentCrop",
+            "confidence": 0.963226318359375
+        },
+        {
+            "tile": 73,
+            "x": 512,
+            "y": 256,
+            "prediction": "AnnualCrop",
+            "confidence": 0.5553300976753235
+        },
+        {
+            "tile": 74,
+            "x": 576,
+            "y": 256,
+            "prediction": "AnnualCrop",
+            "confidence": 0.8172725439071655
+        },
+        {
+            "tile": 75,
+            "x": 640,
+            "y": 256,
+            "prediction": "PermanentCrop",
+            "confidence": 0.8257599472999573
+        },
+        {
+            "tile": 76,
+            "x": 704,
+            "y": 256,
+            "prediction": "Pasture",
+            "confidence": 0.5574821829795837
+        },
+        {
+            "tile": 77,
+            "x": 768,
+            "y": 256,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9860666394233704
+        },
+        {
+            "tile": 78,
+            "x": 832,
+            "y": 256,
+            "prediction": "AnnualCrop",
+            "confidence": 0.8747807145118713
+        },
+        {
+            "tile": 79,
+            "x": 896,
+            "y": 256,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9031957983970642
+        },
+        {
+            "tile": 80,
+            "x": 960,
+            "y": 256,
+            "prediction": "River",
+            "confidence": 0.5900454521179199
+        },
+        {
+            "tile": 81,
+            "x": 0,
+            "y": 320,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9879111051559448
+        },
+        {
+            "tile": 82,
+            "x": 64,
+            "y": 320,
+            "prediction": "River",
+            "confidence": 0.5062992572784424
+        },
+        {
+            "tile": 83,
+            "x": 128,
+            "y": 320,
+            "prediction": "River",
+            "confidence": 0.837841808795929
+        },
+        {
+            "tile": 84,
+            "x": 192,
+            "y": 320,
+            "prediction": "AnnualCrop",
+            "confidence": 0.8099520206451416
+        },
+        {
+            "tile": 85,
+            "x": 256,
+            "y": 320,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9310669898986816
+        },
+        {
+            "tile": 86,
+            "x": 320,
+            "y": 320,
+            "prediction": "AnnualCrop",
+            "confidence": 0.7737856507301331
+        },
+        {
+            "tile": 87,
+            "x": 384,
+            "y": 320,
+            "prediction": "AnnualCrop",
+            "confidence": 0.999769389629364
+        },
+        {
+            "tile": 88,
+            "x": 448,
+            "y": 320,
+            "prediction": "River",
+            "confidence": 0.848832905292511
+        },
+        {
+            "tile": 89,
+            "x": 512,
+            "y": 320,
+            "prediction": "AnnualCrop",
+            "confidence": 0.8643329739570618
+        },
+        {
+            "tile": 90,
+            "x": 576,
+            "y": 320,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9718043208122253
+        },
+        {
+            "tile": 91,
+            "x": 640,
+            "y": 320,
+            "prediction": "AnnualCrop",
+            "confidence": 0.7075687646865845
+        },
+        {
+            "tile": 92,
+            "x": 704,
+            "y": 320,
+            "prediction": "AnnualCrop",
+            "confidence": 0.8365742564201355
+        },
+        {
+            "tile": 93,
+            "x": 768,
+            "y": 320,
+            "prediction": "AnnualCrop",
+            "confidence": 0.8327223062515259
+        },
+        {
+            "tile": 94,
+            "x": 832,
+            "y": 320,
+            "prediction": "PermanentCrop",
+            "confidence": 0.9353136420249939
+        },
+        {
+            "tile": 95,
+            "x": 896,
+            "y": 320,
+            "prediction": "SeaLake",
+            "confidence": 0.8052626848220825
+        },
+        {
+            "tile": 96,
+            "x": 960,
+            "y": 320,
+            "prediction": "River",
+            "confidence": 0.8759503960609436
+        },
+        {
+            "tile": 97,
+            "x": 0,
+            "y": 384,
+            "prediction": "Industrial",
+            "confidence": 0.9045456647872925
+        },
+        {
+            "tile": 98,
+            "x": 64,
+            "y": 384,
+            "prediction": "River",
+            "confidence": 0.9407488107681274
+        },
+        {
+            "tile": 99,
+            "x": 128,
+            "y": 384,
+            "prediction": "River",
+            "confidence": 0.9995429515838623
+        },
+        {
+            "tile": 100,
+            "x": 192,
+            "y": 384,
+            "prediction": "River",
+            "confidence": 0.9265639781951904
+        },
+        {
+            "tile": 101,
+            "x": 256,
+            "y": 384,
+            "prediction": "River",
+            "confidence": 0.9210522770881653
+        },
+        {
+            "tile": 102,
+            "x": 320,
+            "y": 384,
+            "prediction": "AnnualCrop",
+            "confidence": 0.6758964657783508
+        },
+        {
+            "tile": 103,
+            "x": 384,
+            "y": 384,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9003490805625916
+        },
+        {
+            "tile": 104,
+            "x": 448,
+            "y": 384,
+            "prediction": "SeaLake",
+            "confidence": 0.5551899671554565
+        },
+        {
+            "tile": 105,
+            "x": 512,
+            "y": 384,
+            "prediction": "PermanentCrop",
+            "confidence": 0.6831440925598145
+        },
+        {
+            "tile": 106,
+            "x": 576,
+            "y": 384,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9617443084716797
+        },
+        {
+            "tile": 107,
+            "x": 640,
+            "y": 384,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9661240577697754
+        },
+        {
+            "tile": 108,
+            "x": 704,
+            "y": 384,
+            "prediction": "PermanentCrop",
+            "confidence": 0.7081962823867798
+        },
+        {
+            "tile": 109,
+            "x": 768,
+            "y": 384,
+            "prediction": "AnnualCrop",
+            "confidence": 0.93882155418396
+        },
+        {
+            "tile": 110,
+            "x": 832,
+            "y": 384,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9938202500343323
+        },
+        {
+            "tile": 111,
+            "x": 896,
+            "y": 384,
+            "prediction": "Pasture",
+            "confidence": 0.8390884399414062
+        },
+        {
+            "tile": 112,
+            "x": 960,
+            "y": 384,
+            "prediction": "Forest",
+            "confidence": 0.5112191438674927
+        },
+        {
+            "tile": 113,
+            "x": 0,
+            "y": 448,
+            "prediction": "River",
+            "confidence": 0.9412854313850403
+        },
+        {
+            "tile": 114,
+            "x": 64,
+            "y": 448,
+            "prediction": "River",
+            "confidence": 0.9999831914901733
+        },
+        {
+            "tile": 115,
+            "x": 128,
+            "y": 448,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9211186170578003
+        },
+        {
+            "tile": 116,
+            "x": 192,
+            "y": 448,
+            "prediction": "AnnualCrop",
+            "confidence": 0.7339046001434326
+        },
+        {
+            "tile": 117,
+            "x": 256,
+            "y": 448,
+            "prediction": "PermanentCrop",
+            "confidence": 0.9913967251777649
+        },
+        {
+            "tile": 118,
+            "x": 320,
+            "y": 448,
+            "prediction": "River",
+            "confidence": 0.9741067290306091
+        },
+        {
+            "tile": 119,
+            "x": 384,
+            "y": 448,
+            "prediction": "Industrial",
+            "confidence": 0.9336236119270325
+        },
+        {
+            "tile": 120,
+            "x": 448,
+            "y": 448,
+            "prediction": "River",
+            "confidence": 0.9988062381744385
+        },
+        {
+            "tile": 121,
+            "x": 512,
+            "y": 448,
+            "prediction": "River",
+            "confidence": 0.9585962891578674
+        },
+        {
+            "tile": 122,
+            "x": 576,
+            "y": 448,
+            "prediction": "AnnualCrop",
+            "confidence": 0.5297624468803406
+        },
+        {
+            "tile": 123,
+            "x": 640,
+            "y": 448,
+            "prediction": "PermanentCrop",
+            "confidence": 0.5913620591163635
+        },
+        {
+            "tile": 124,
+            "x": 704,
+            "y": 448,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9615659117698669
+        },
+        {
+            "tile": 125,
+            "x": 768,
+            "y": 448,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9899231791496277
+        },
+        {
+            "tile": 126,
+            "x": 832,
+            "y": 448,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9983206391334534
+        },
+        {
+            "tile": 127,
+            "x": 896,
+            "y": 448,
+            "prediction": "PermanentCrop",
+            "confidence": 0.7859488129615784
+        },
+        {
+            "tile": 128,
+            "x": 960,
+            "y": 448,
+            "prediction": "AnnualCrop",
+            "confidence": 0.8587878346443176
+        },
+        {
+            "tile": 129,
+            "x": 0,
+            "y": 512,
+            "prediction": "River",
+            "confidence": 0.9998021721839905
+        },
+        {
+            "tile": 130,
+            "x": 64,
+            "y": 512,
+            "prediction": "AnnualCrop",
+            "confidence": 0.5706261396408081
+        },
+        {
+            "tile": 131,
+            "x": 128,
+            "y": 512,
+            "prediction": "River",
+            "confidence": 0.6193408370018005
+        },
+        {
+            "tile": 132,
+            "x": 192,
+            "y": 512,
+            "prediction": "AnnualCrop",
+            "confidence": 0.7630690932273865
+        },
+        {
+            "tile": 133,
+            "x": 256,
+            "y": 512,
+            "prediction": "River",
+            "confidence": 0.683627188205719
+        },
+        {
+            "tile": 134,
+            "x": 320,
+            "y": 512,
+            "prediction": "River",
+            "confidence": 0.8257864713668823
+        },
+        {
+            "tile": 135,
+            "x": 384,
+            "y": 512,
+            "prediction": "River",
+            "confidence": 0.9442534446716309
+        },
+        {
+            "tile": 136,
+            "x": 448,
+            "y": 512,
+            "prediction": "PermanentCrop",
+            "confidence": 0.45016756653785706
+        },
+        {
+            "tile": 137,
+            "x": 512,
+            "y": 512,
+            "prediction": "Industrial",
+            "confidence": 0.5318335294723511
+        },
+        {
+            "tile": 138,
+            "x": 576,
+            "y": 512,
+            "prediction": "River",
+            "confidence": 0.9718440771102905
+        },
+        {
+            "tile": 139,
+            "x": 640,
+            "y": 512,
+            "prediction": "Industrial",
+            "confidence": 0.6951479911804199
+        },
+        {
+            "tile": 140,
+            "x": 704,
+            "y": 512,
+            "prediction": "River",
+            "confidence": 0.5294278264045715
+        },
+        {
+            "tile": 141,
+            "x": 768,
+            "y": 512,
+            "prediction": "PermanentCrop",
+            "confidence": 0.8566340804100037
+        },
+        {
+            "tile": 142,
+            "x": 832,
+            "y": 512,
+            "prediction": "PermanentCrop",
+            "confidence": 0.7126168608665466
+        },
+        {
+            "tile": 143,
+            "x": 896,
+            "y": 512,
+            "prediction": "AnnualCrop",
+            "confidence": 0.837544858455658
+        },
+        {
+            "tile": 144,
+            "x": 960,
+            "y": 512,
+            "prediction": "PermanentCrop",
+            "confidence": 0.954310953617096
+        },
+        {
+            "tile": 145,
+            "x": 0,
+            "y": 576,
+            "prediction": "River",
+            "confidence": 0.85316002368927
+        },
+        {
+            "tile": 146,
+            "x": 64,
+            "y": 576,
+            "prediction": "River",
+            "confidence": 0.876255989074707
+        },
+        {
+            "tile": 147,
+            "x": 128,
+            "y": 576,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9871521592140198
+        },
+        {
+            "tile": 148,
+            "x": 192,
+            "y": 576,
+            "prediction": "Industrial",
+            "confidence": 0.9683545827865601
+        },
+        {
+            "tile": 149,
+            "x": 256,
+            "y": 576,
+            "prediction": "PermanentCrop",
+            "confidence": 0.4930301904678345
+        },
+        {
+            "tile": 150,
+            "x": 320,
+            "y": 576,
+            "prediction": "River",
+            "confidence": 0.9174275398254395
+        },
+        {
+            "tile": 151,
+            "x": 384,
+            "y": 576,
+            "prediction": "Industrial",
+            "confidence": 0.8633628487586975
+        },
+        {
+            "tile": 152,
+            "x": 448,
+            "y": 576,
+            "prediction": "River",
+            "confidence": 0.9998412132263184
+        },
+        {
+            "tile": 153,
+            "x": 512,
+            "y": 576,
+            "prediction": "Industrial",
+            "confidence": 0.8299075365066528
+        },
+        {
+            "tile": 154,
+            "x": 576,
+            "y": 576,
+            "prediction": "River",
+            "confidence": 0.9798839092254639
+        },
+        {
+            "tile": 155,
+            "x": 640,
+            "y": 576,
+            "prediction": "PermanentCrop",
+            "confidence": 0.44115641713142395
+        },
+        {
+            "tile": 156,
+            "x": 704,
+            "y": 576,
+            "prediction": "Industrial",
+            "confidence": 0.9003881812095642
+        },
+        {
+            "tile": 157,
+            "x": 768,
+            "y": 576,
+            "prediction": "AnnualCrop",
+            "confidence": 0.2320478856563568
+        },
+        {
+            "tile": 158,
+            "x": 832,
+            "y": 576,
+            "prediction": "PermanentCrop",
+            "confidence": 0.8406609892845154
+        },
+        {
+            "tile": 159,
+            "x": 896,
+            "y": 576,
+            "prediction": "PermanentCrop",
+            "confidence": 0.9962332844734192
+        },
+        {
+            "tile": 160,
+            "x": 960,
+            "y": 576,
+            "prediction": "River",
+            "confidence": 0.6842918395996094
+        },
+        {
+            "tile": 161,
+            "x": 0,
+            "y": 640,
+            "prediction": "SeaLake",
+            "confidence": 0.3734050989151001
+        },
+        {
+            "tile": 162,
+            "x": 64,
+            "y": 640,
+            "prediction": "River",
+            "confidence": 0.9994903802871704
+        },
+        {
+            "tile": 163,
+            "x": 128,
+            "y": 640,
+            "prediction": "River",
+            "confidence": 0.9382080435752869
+        },
+        {
+            "tile": 164,
+            "x": 192,
+            "y": 640,
+            "prediction": "Industrial",
+            "confidence": 0.9253098368644714
+        },
+        {
+            "tile": 165,
+            "x": 256,
+            "y": 640,
+            "prediction": "Industrial",
+            "confidence": 0.9999467134475708
+        },
+        {
+            "tile": 166,
+            "x": 320,
+            "y": 640,
+            "prediction": "Industrial",
+            "confidence": 0.858534038066864
+        },
+        {
+            "tile": 167,
+            "x": 384,
+            "y": 640,
+            "prediction": "Industrial",
+            "confidence": 0.99164879322052
+        },
+        {
+            "tile": 168,
+            "x": 448,
+            "y": 640,
+            "prediction": "River",
+            "confidence": 0.427839070558548
+        },
+        {
+            "tile": 169,
+            "x": 512,
+            "y": 640,
+            "prediction": "River",
+            "confidence": 0.9989871382713318
+        },
+        {
+            "tile": 170,
+            "x": 576,
+            "y": 640,
+            "prediction": "River",
+            "confidence": 0.9902974963188171
+        },
+        {
+            "tile": 171,
+            "x": 640,
+            "y": 640,
+            "prediction": "AnnualCrop",
+            "confidence": 0.5920045971870422
+        },
+        {
+            "tile": 172,
+            "x": 704,
+            "y": 640,
+            "prediction": "River",
+            "confidence": 0.9727802276611328
+        },
+        {
+            "tile": 173,
+            "x": 768,
+            "y": 640,
+            "prediction": "Industrial",
+            "confidence": 0.6489142775535583
+        },
+        {
+            "tile": 174,
+            "x": 832,
+            "y": 640,
+            "prediction": "Industrial",
+            "confidence": 0.9721049666404724
+        },
+        {
+            "tile": 175,
+            "x": 896,
+            "y": 640,
+            "prediction": "Industrial",
+            "confidence": 0.9996240139007568
+        },
+        {
+            "tile": 176,
+            "x": 960,
+            "y": 640,
+            "prediction": "Industrial",
+            "confidence": 0.9999755620956421
+        },
+        {
+            "tile": 177,
+            "x": 0,
+            "y": 704,
+            "prediction": "River",
+            "confidence": 0.675548255443573
+        },
+        {
+            "tile": 178,
+            "x": 64,
+            "y": 704,
+            "prediction": "AnnualCrop",
+            "confidence": 0.7037825584411621
+        },
+        {
+            "tile": 179,
+            "x": 128,
+            "y": 704,
+            "prediction": "PermanentCrop",
+            "confidence": 0.38467371463775635
+        },
+        {
+            "tile": 180,
+            "x": 192,
+            "y": 704,
+            "prediction": "Industrial",
+            "confidence": 0.9990824460983276
+        },
+        {
+            "tile": 181,
+            "x": 256,
+            "y": 704,
+            "prediction": "Industrial",
+            "confidence": 0.9797765612602234
+        },
+        {
+            "tile": 182,
+            "x": 320,
+            "y": 704,
+            "prediction": "Industrial",
+            "confidence": 0.9954972267150879
+        },
+        {
+            "tile": 183,
+            "x": 384,
+            "y": 704,
+            "prediction": "SeaLake",
+            "confidence": 0.5483728647232056
+        },
+        {
+            "tile": 184,
+            "x": 448,
+            "y": 704,
+            "prediction": "PermanentCrop",
+            "confidence": 0.8037784695625305
+        },
+        {
+            "tile": 185,
+            "x": 512,
+            "y": 704,
+            "prediction": "PermanentCrop",
+            "confidence": 0.8930249214172363
+        },
+        {
+            "tile": 186,
+            "x": 576,
+            "y": 704,
+            "prediction": "PermanentCrop",
+            "confidence": 0.4996940493583679
+        },
+        {
+            "tile": 187,
+            "x": 640,
+            "y": 704,
+            "prediction": "Industrial",
+            "confidence": 0.6583882570266724
+        },
+        {
+            "tile": 188,
+            "x": 704,
+            "y": 704,
+            "prediction": "Industrial",
+            "confidence": 0.9978185892105103
+        },
+        {
+            "tile": 189,
+            "x": 768,
+            "y": 704,
+            "prediction": "Industrial",
+            "confidence": 0.9996944665908813
+        },
+        {
+            "tile": 190,
+            "x": 832,
+            "y": 704,
+            "prediction": "PermanentCrop",
+            "confidence": 0.5760549306869507
+        },
+        {
+            "tile": 191,
+            "x": 896,
+            "y": 704,
+            "prediction": "Highway",
+            "confidence": 0.5770896077156067
+        },
+        {
+            "tile": 192,
+            "x": 960,
+            "y": 704,
+            "prediction": "Industrial",
+            "confidence": 0.8717514872550964
+        },
+        {
+            "tile": 193,
+            "x": 0,
+            "y": 768,
+            "prediction": "River",
+            "confidence": 0.9326194524765015
+        },
+        {
+            "tile": 194,
+            "x": 64,
+            "y": 768,
+            "prediction": "Industrial",
+            "confidence": 0.8467846512794495
+        },
+        {
+            "tile": 195,
+            "x": 128,
+            "y": 768,
+            "prediction": "River",
+            "confidence": 0.889902651309967
+        },
+        {
+            "tile": 196,
+            "x": 192,
+            "y": 768,
+            "prediction": "Industrial",
+            "confidence": 0.5972220301628113
+        },
+        {
+            "tile": 197,
+            "x": 256,
+            "y": 768,
+            "prediction": "Industrial",
+            "confidence": 0.9865047335624695
+        },
+        {
+            "tile": 198,
+            "x": 320,
+            "y": 768,
+            "prediction": "Industrial",
+            "confidence": 0.9999356269836426
+        },
+        {
+            "tile": 199,
+            "x": 384,
+            "y": 768,
+            "prediction": "River",
+            "confidence": 0.5841537714004517
+        },
+        {
+            "tile": 200,
+            "x": 448,
+            "y": 768,
+            "prediction": "River",
+            "confidence": 0.602762758731842
+        },
+        {
+            "tile": 201,
+            "x": 512,
+            "y": 768,
+            "prediction": "PermanentCrop",
+            "confidence": 0.7276953458786011
+        },
+        {
+            "tile": 202,
+            "x": 576,
+            "y": 768,
+            "prediction": "Industrial",
+            "confidence": 0.9985148310661316
+        },
+        {
+            "tile": 203,
+            "x": 640,
+            "y": 768,
+            "prediction": "Industrial",
+            "confidence": 0.9775771498680115
+        },
+        {
+            "tile": 204,
+            "x": 704,
+            "y": 768,
+            "prediction": "Industrial",
+            "confidence": 0.9999794960021973
+        },
+        {
+            "tile": 205,
+            "x": 768,
+            "y": 768,
+            "prediction": "Industrial",
+            "confidence": 0.7498985528945923
+        },
+        {
+            "tile": 206,
+            "x": 832,
+            "y": 768,
+            "prediction": "River",
+            "confidence": 0.5622966289520264
+        },
+        {
+            "tile": 207,
+            "x": 896,
+            "y": 768,
+            "prediction": "PermanentCrop",
+            "confidence": 0.8750916123390198
+        },
+        {
+            "tile": 208,
+            "x": 960,
+            "y": 768,
+            "prediction": "River",
+            "confidence": 0.8593581914901733
+        },
+        {
+            "tile": 209,
+            "x": 0,
+            "y": 832,
+            "prediction": "PermanentCrop",
+            "confidence": 0.5224864482879639
+        },
+        {
+            "tile": 210,
+            "x": 64,
+            "y": 832,
+            "prediction": "River",
+            "confidence": 0.9874253869056702
+        },
+        {
+            "tile": 211,
+            "x": 128,
+            "y": 832,
+            "prediction": "River",
+            "confidence": 0.9947980642318726
+        },
+        {
+            "tile": 212,
+            "x": 192,
+            "y": 832,
+            "prediction": "Industrial",
+            "confidence": 0.9765247106552124
+        },
+        {
+            "tile": 213,
+            "x": 256,
+            "y": 832,
+            "prediction": "PermanentCrop",
+            "confidence": 0.7036360502243042
+        },
+        {
+            "tile": 214,
+            "x": 320,
+            "y": 832,
+            "prediction": "River",
+            "confidence": 0.7237801551818848
+        },
+        {
+            "tile": 215,
+            "x": 384,
+            "y": 832,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9982911944389343
+        },
+        {
+            "tile": 216,
+            "x": 448,
+            "y": 832,
+            "prediction": "AnnualCrop",
+            "confidence": 0.7678983807563782
+        },
+        {
+            "tile": 217,
+            "x": 512,
+            "y": 832,
+            "prediction": "PermanentCrop",
+            "confidence": 0.5350386500358582
+        },
+        {
+            "tile": 218,
+            "x": 576,
+            "y": 832,
+            "prediction": "Industrial",
+            "confidence": 0.9893513321876526
+        },
+        {
+            "tile": 219,
+            "x": 640,
+            "y": 832,
+            "prediction": "Industrial",
+            "confidence": 0.9991124272346497
+        },
+        {
+            "tile": 220,
+            "x": 704,
+            "y": 832,
+            "prediction": "SeaLake",
+            "confidence": 0.9609353542327881
+        },
+        {
+            "tile": 221,
+            "x": 768,
+            "y": 832,
+            "prediction": "River",
+            "confidence": 0.6610312461853027
+        },
+        {
+            "tile": 222,
+            "x": 832,
+            "y": 832,
+            "prediction": "SeaLake",
+            "confidence": 0.9214413166046143
+        },
+        {
+            "tile": 223,
+            "x": 896,
+            "y": 832,
+            "prediction": "SeaLake",
+            "confidence": 0.9425737857818604
+        },
+        {
+            "tile": 224,
+            "x": 960,
+            "y": 832,
+            "prediction": "PermanentCrop",
+            "confidence": 0.7883437871932983
+        },
+        {
+            "tile": 225,
+            "x": 0,
+            "y": 896,
+            "prediction": "River",
+            "confidence": 0.9919614195823669
+        },
+        {
+            "tile": 226,
+            "x": 64,
+            "y": 896,
+            "prediction": "River",
+            "confidence": 0.8467676639556885
+        },
+        {
+            "tile": 227,
+            "x": 128,
+            "y": 896,
+            "prediction": "Industrial",
+            "confidence": 0.6997026205062866
+        },
+        {
+            "tile": 228,
+            "x": 192,
+            "y": 896,
+            "prediction": "Industrial",
+            "confidence": 0.9992260932922363
+        },
+        {
+            "tile": 229,
+            "x": 256,
+            "y": 896,
+            "prediction": "River",
+            "confidence": 0.9051616191864014
+        },
+        {
+            "tile": 230,
+            "x": 320,
+            "y": 896,
+            "prediction": "PermanentCrop",
+            "confidence": 0.5098307132720947
+        },
+        {
+            "tile": 231,
+            "x": 384,
+            "y": 896,
+            "prediction": "AnnualCrop",
+            "confidence": 0.8629733324050903
+        },
+        {
+            "tile": 232,
+            "x": 448,
+            "y": 896,
+            "prediction": "PermanentCrop",
+            "confidence": 0.9796094298362732
+        },
+        {
+            "tile": 233,
+            "x": 512,
+            "y": 896,
+            "prediction": "River",
+            "confidence": 0.9992812275886536
+        },
+        {
+            "tile": 234,
+            "x": 576,
+            "y": 896,
+            "prediction": "Industrial",
+            "confidence": 0.8818077445030212
+        },
+        {
+            "tile": 235,
+            "x": 640,
+            "y": 896,
+            "prediction": "AnnualCrop",
+            "confidence": 0.498617559671402
+        },
+        {
+            "tile": 236,
+            "x": 704,
+            "y": 896,
+            "prediction": "PermanentCrop",
+            "confidence": 0.9277832508087158
+        },
+        {
+            "tile": 237,
+            "x": 768,
+            "y": 896,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9995970129966736
+        },
+        {
+            "tile": 238,
+            "x": 832,
+            "y": 896,
+            "prediction": "PermanentCrop",
+            "confidence": 0.9548607468605042
+        },
+        {
+            "tile": 239,
+            "x": 896,
+            "y": 896,
+            "prediction": "Industrial",
+            "confidence": 0.5899447798728943
+        },
+        {
+            "tile": 240,
+            "x": 960,
+            "y": 896,
+            "prediction": "Industrial",
+            "confidence": 0.9929243326187134
+        },
+        {
+            "tile": 241,
+            "x": 0,
+            "y": 960,
+            "prediction": "River",
+            "confidence": 0.6280204653739929
+        },
+        {
+            "tile": 242,
+            "x": 64,
+            "y": 960,
+            "prediction": "River",
+            "confidence": 0.8608797788619995
+        },
+        {
+            "tile": 243,
+            "x": 128,
+            "y": 960,
+            "prediction": "Industrial",
+            "confidence": 0.9995111227035522
+        },
+        {
+            "tile": 244,
+            "x": 192,
+            "y": 960,
+            "prediction": "Industrial",
+            "confidence": 0.8490117788314819
+        },
+        {
+            "tile": 245,
+            "x": 256,
+            "y": 960,
+            "prediction": "Industrial",
+            "confidence": 0.99081951379776
+        },
+        {
+            "tile": 246,
+            "x": 320,
+            "y": 960,
+            "prediction": "PermanentCrop",
+            "confidence": 0.9101049304008484
+        },
+        {
+            "tile": 247,
+            "x": 384,
+            "y": 960,
+            "prediction": "Industrial",
+            "confidence": 0.7697835564613342
+        },
+        {
+            "tile": 248,
+            "x": 448,
+            "y": 960,
+            "prediction": "River",
+            "confidence": 0.5859991908073425
+        },
+        {
+            "tile": 249,
+            "x": 512,
+            "y": 960,
+            "prediction": "River",
+            "confidence": 0.445095032453537
+        },
+        {
+            "tile": 250,
+            "x": 576,
+            "y": 960,
+            "prediction": "SeaLake",
+            "confidence": 0.5833562016487122
+        },
+        {
+            "tile": 251,
+            "x": 640,
+            "y": 960,
+            "prediction": "PermanentCrop",
+            "confidence": 0.9764832258224487
+        },
+        {
+            "tile": 252,
+            "x": 704,
+            "y": 960,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9517806172370911
+        },
+        {
+            "tile": 253,
+            "x": 768,
+            "y": 960,
+            "prediction": "PermanentCrop",
+            "confidence": 0.7251126766204834
+        },
+        {
+            "tile": 254,
+            "x": 832,
+            "y": 960,
+            "prediction": "AnnualCrop",
+            "confidence": 0.9225256443023682
+        },
+        {
+            "tile": 255,
+            "x": 896,
+            "y": 960,
+            "prediction": "PermanentCrop",
+            "confidence": 0.8058240413665771
+        },
+        {
+            "tile": 256,
+            "x": 960,
+            "y": 960,
+            "prediction": "AnnualCrop",
+            "confidence": 0.553145706653595
+        }
+    ]
+}
