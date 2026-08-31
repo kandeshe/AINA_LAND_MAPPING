@@ -1,0 +1,114 @@
+{
+  "vegetables": [
+    {
+      "name": "Pumpkin",
+      "category": "vegetable",
+      "water_requirement": "moderate",
+      "drought_tolerance": "moderate",
+      "soil_types": ["sandy loam", "loam"],
+      "drainage": "good",
+      "uses": ["food"],
+      "suitable_conditions": ["warm climate", "well-drained soil"]
+    },
+    {
+      "name": "Watermelon",
+      "category": "vegetable",
+      "water_requirement": "moderate",
+      "drought_tolerance": "moderate",
+      "soil_types": ["sandy", "sandy loam"],
+      "drainage": "good",
+      "uses": ["food"],
+      "suitable_conditions": ["warm climate", "sunny conditions", "well-drained soil"]
+    },
+    {
+      "name": "Spinach",
+      "category": "leafy_vegetable",
+      "water_requirement": "moderate",
+      "drought_tolerance": "low",
+      "soil_types": ["loam", "sandy loam"],
+      "drainage": "good",
+      "uses": ["food"],
+      "suitable_conditions": ["adequate moisture", "fertile soil"]
+    },
+    {
+      "name": "Kale",
+      "category": "leafy_vegetable",
+      "water_requirement": "moderate",
+      "drought_tolerance": "low_to_moderate",
+      "soil_types": ["loam", "sandy loam"],
+      "drainage": "good",
+      "uses": ["food"],
+      "suitable_conditions": ["moderate temperatures", "fertile soil", "adequate moisture"]
+    },
+    {
+      "name": "Carrot",
+      "category": "root_vegetable",
+      "water_requirement": "moderate",
+      "drought_tolerance": "low",
+      "soil_types": ["sandy", "sandy loam"],
+      "drainage": "excellent",
+      "uses": ["food"],
+      "suitable_conditions": ["loose soil", "good drainage", "adequate moisture"]
+    },
+    {
+      "name": "Beetroot",
+      "category": "root_vegetable",
+      "water_requirement": "moderate",
+      "drought_tolerance": "low_to_moderate",
+      "soil_types": ["loam", "sandy loam"],
+      "drainage": "good",
+      "uses": ["food"],
+      "suitable_conditions": ["fertile soil", "adequate moisture"]
+    },
+    {
+      "name": "Squash",
+      "category": "vegetable",
+      "water_requirement": "moderate",
+      "drought_tolerance": "moderate",
+      "soil_types": ["sandy loam", "loam"],
+      "drainage": "good",
+      "uses": ["food"],
+      "suitable_conditions": ["warm climate", "well-drained soil"]
+    },
+    {
+      "name": "Butternut",
+      "category": "vegetable",
+      "water_requirement": "moderate",
+      "drought_tolerance": "moderate",
+      "soil_types": ["sandy loam", "loam"],
+      "drainage": "good",
+      "uses": ["food"],
+      "suitable_conditions": ["warm climate", "well-drained soil"]
+    },
+    {
+      "name": "Tomato",
+      "category": "vegetable",
+      "water_requirement": "moderate",
+      "drought_tolerance": "low_to_moderate",
+      "soil_types": ["sandy loam", "loam"],
+      "drainage": "good",
+      "uses": ["food"],
+      "suitable_conditions": ["warm climate", "fertile soil", "adequate water"]
+    },
+    {
+      "name": "Green Pepper",
+      "category": "vegetable",
+      "water_requirement": "moderate",
+      "drought_tolerance": "low",
+      "soil_types": ["loam", "sandy loam"],
+      "drainage": "good",
+      "uses": ["food"],
+      "suitable_conditions": ["warm climate", "fertile soil", "adequate water"]
+    },
+    {
+      "name": "Eggplant",
+      "category": "vegetable",
+      "water_requirement": "moderate",
+      "drought_tolerance": "low_to_moderate",
+      "soil_types": ["loam", "sandy loam"],
+      "drainage": "good",
+      "uses": ["food"],
+      "suitable_conditions": ["warm climate", "fertile soil", "adequate moisture"]
+    }
+  ]
+}

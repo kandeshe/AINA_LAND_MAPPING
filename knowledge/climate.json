@@ -1,0 +1,29 @@
+{
+  "zones": [
+
+    {
+      "name": "Arid",
+      "rainfall_max": 250,
+      "description": "Very dry climate."
+    },
+
+    {
+      "name": "Semi-Arid",
+      "rainfall_max": 500,
+      "description": "Seasonal rainfall."
+    },
+
+    {
+      "name": "Sub-Humid",
+      "rainfall_max": 800,
+      "description": "Good agricultural rainfall."
+    },
+
+    {
+      "name": "Humid",
+      "rainfall_max": 2000,
+      "description": "High rainfall region."
+    }
+
+  ]
+}

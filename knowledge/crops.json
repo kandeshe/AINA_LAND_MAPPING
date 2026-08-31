@@ -1,0 +1,106 @@
+{
+  "crops": [
+    {
+      "name": "Pearl Millet",
+      "category": "field_crop",
+      "drought_tolerance": "high",
+      "water_requirement": "low",
+      "rainfall_mm": [250, 600],
+      "soil_types": ["sandy", "sandy loam", "loam"],
+      "soil_fertility": "low_to_moderate",
+      "flood_tolerance": "low",
+      "uses": ["grain", "food", "fodder"],
+      "soil_benefits": [],
+      "suitable_conditions": [
+        "low rainfall",
+        "dry conditions",
+        "limited groundwater",
+        "sandy soils"
+      ],
+      "rehabilitation_role": "drought-tolerant crop suitable for low-moisture conditions"
+    },
+    {
+      "name": "Sorghum",
+      "category": "field_crop",
+      "drought_tolerance": "high",
+      "water_requirement": "low_to_moderate",
+      "rainfall_mm": [300, 700],
+      "soil_types": ["sandy", "sandy loam", "loam"],
+      "soil_fertility": "low_to_moderate",
+      "flood_tolerance": "low",
+      "uses": ["grain", "food", "fodder"],
+      "soil_benefits": [],
+      "suitable_conditions": [
+        "semi-arid conditions",
+        "low_to_moderate rainfall",
+        "sandy soils"
+      ],
+      "rehabilitation_role": "drought-tolerant cereal for relatively dry environments"
+    },
+    {
+      "name": "Cowpeas",
+      "category": "legume",
+      "drought_tolerance": "high",
+      "water_requirement": "low",
+      "rainfall_mm": [300, 800],
+      "soil_types": ["sandy", "sandy loam", "loam"],
+      "soil_fertility": "low_to_moderate",
+      "flood_tolerance": "low",
+      "uses": ["grain", "food", "fodder"],
+      "soil_benefits": [
+        "legume",
+        "supports biological nitrogen fixation",
+        "useful in crop rotation"
+      ],
+      "suitable_conditions": [
+        "warm conditions",
+        "low to moderate rainfall",
+        "sandy soils",
+        "lower fertility soils"
+      ],
+      "rehabilitation_role": "legume that can be incorporated into crop rotation and soil fertility management"
+    },
+    {
+      "name": "Maize",
+      "category": "cereal",
+      "drought_tolerance": "low_to_moderate",
+      "water_requirement": "moderate_to_high",
+      "rainfall_mm": [500, 800],
+      "soil_types": ["loam", "sandy loam", "well_drained clay loam"],
+      "soil_fertility": "moderate_to_high",
+      "flood_tolerance": "low",
+      "uses": ["grain", "food", "fodder"],
+      "soil_benefits": [],
+      "suitable_conditions": [
+        "adequate rainfall",
+        "adequate soil fertility",
+        "good drainage",
+        "sufficient growing-season moisture"
+      ],
+      "rehabilitation_role": "suitable where rainfall, soil fertility and water availability are sufficient"
+    },
+    {
+      "name": "Bambara Groundnuts",
+      "category": "legume",
+      "drought_tolerance": "high",
+      "water_requirement": "low",
+      "rainfall_mm": [350, 800],
+      "soil_types": ["sandy", "sandy loam", "well_drained soils"],
+      "soil_fertility": "low_to_moderate",
+      "flood_tolerance": "low",
+      "uses": ["grain", "food"],
+      "soil_benefits": [
+        "legume",
+        "supports crop diversification",
+        "suitable for low-input farming systems"
+      ],
+      "suitable_conditions": [
+        "warm climate",
+        "semi-arid conditions",
+        "sandy soils",
+        "limited water availability"
+      ],
+      "rehabilitation_role": "drought-tolerant legume suitable for diversification and low-input systems"
+    }
+  ]
+}

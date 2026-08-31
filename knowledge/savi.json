@@ -1,0 +1,32 @@
+{
+  "name": "SAVI",
+  "description": "Soil Adjusted Vegetation Index reduces the influence of bare soil while measuring vegetation.",
+
+  "ranges": [
+    {
+      "min": -1,
+      "max": 0.1,
+      "meaning": "Bare soil or no vegetation."
+    },
+    {
+      "min": 0.1,
+      "max": 0.3,
+      "meaning": "Sparse vegetation."
+    },
+    {
+      "min": 0.3,
+      "max": 0.6,
+      "meaning": "Moderate vegetation."
+    },
+    {
+      "min": 0.6,
+      "max": 1,
+      "meaning": "Healthy vegetation."
+    }
+  ],
+
+  "recommendation": [
+    "Useful in dry regions like Namibia.",
+    "More reliable than NDVI where bare soil is dominant."
+  ]
+}
