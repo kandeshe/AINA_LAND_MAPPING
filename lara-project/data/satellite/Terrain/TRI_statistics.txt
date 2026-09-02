@@ -1,0 +1,5 @@
+========== TRI ==========
+
+Minimum TRI : 0.00
+Maximum TRI : 491.28
+Average TRI : 80.84

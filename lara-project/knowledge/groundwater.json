@@ -1,0 +1,22 @@
+{
+  "name": "Groundwater",
+
+  "levels": [
+
+    {
+      "name": "Low",
+      "description": "Limited groundwater availability."
+    },
+
+    {
+      "name": "Moderate",
+      "description": "Groundwater is available for seasonal irrigation."
+    },
+
+    {
+      "name": "High",
+      "description": "Reliable groundwater source."
+    }
+
+  ]
+}

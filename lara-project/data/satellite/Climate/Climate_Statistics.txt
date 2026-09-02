@@ -1,0 +1,16 @@
+CLIMATE ANALYSIS REPORT
+===============================
+
+Minimum Temperature : 22.51 °C
+Maximum Temperature : 30.00 °C
+Average Temperature : 24.82 °C
+Median Temperature  : 22.53 °C
+Std. Deviation      : 3.27 °C
+
+Climate Zone Areas
+-------------------------------
+Very Hot    : 0 pixels   0.0000 sq.km
+Hot         : 173 pixels   0.1571 sq.km
+Warm        : 34 pixels   0.0309 sq.km
+Mild        : 440 pixels   0.3995 sq.km
+Cool        : 0 pixels   0.0000 sq.km

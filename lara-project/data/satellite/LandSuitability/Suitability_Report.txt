@@ -1,0 +1,41 @@
+LAND SUITABILITY REPORT
+==============================
+
+Minimum Score : 21.88
+Maximum Score : 72.59
+Average Score : 51.35
+Median Score  : 57.33
+Standard Deviation : 12.39
+
+CLASS STATISTICS
+-----------------------------
+Very Poor
+Pixels      : 0
+Area (Ha)   : 0.00
+Area (SqKm) : 0.0000
+Coverage    : 0.00%
+-----------------------------
+Poor
+Pixels      : 149
+Area (Ha)   : 13.53
+Area (SqKm) : 0.1353
+Coverage    : 27.14%
+-----------------------------
+Moderate
+Pixels      : 254
+Area (Ha)   : 23.06
+Area (SqKm) : 0.2306
+Coverage    : 46.27%
+-----------------------------
+Good
+Pixels      : 146
+Area (Ha)   : 13.26
+Area (SqKm) : 0.1326
+Coverage    : 26.59%
+-----------------------------
+Excellent
+Pixels      : 0
+Area (Ha)   : 0.00
+Area (SqKm) : 0.0000
+Coverage    : 0.00%
+-----------------------------

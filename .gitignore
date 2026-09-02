@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.venv/
+venv/
+env/
+
+# AI / ML models
+models/
+lara-project/models/
+*.keras
+*.h5
+*.pt
+*.pth
+*.onnx
+*.bin
+*.safetensors
+
+# CNN datasets
+lara-project/cnn/dataset/
+cnn/dataset/
+*.zip
+
+# Large satellite / GIS raster data
+*.tif
+*.tiff
+
+# Large raw satellite data
+data/Sentinel/
+lara-project/data/Sentinel/
+
+# Generated/cache files
+*.tmp
+*.cache
+
+# Environment / secrets
+.env
+.env.*

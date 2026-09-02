@@ -1,0 +1,36 @@
+2026-07-04 21:30:27 | INFO     | aina | Logging initialised. Log file: D:\aina-project\logs\aina_20260704_213027.log
+2026-07-04 21:30:27 | INFO     | aina | Starting AINA desktop application.
+2026-07-04 21:30:36 | INFO     | aina | Location selected via map: {'latitude': -21.605564290634117, 'longitude': 17.215985937499994, 'label': 'Selected Farm', 'radius_km': 5.0}
+2026-07-04 21:30:43 | INFO     | aina | Searching Sentinel-2 products for Selected Farm (-21.6056, 17.2160), 2026-01-01 to 2026-07-04, cloud<=20%
+2026-07-04 21:30:47 | INFO     | aina | Searching Sentinel-2 products for Selected Farm (-21.6056, 17.2160), 2026-06-04 to 2026-07-04, cloud<=20%
+2026-07-04 21:30:49 | INFO     | aina | Found 1 matching Sentinel-2 product(s).
+2026-07-04 21:30:49 | ERROR    | aina | Historical download failed: Missing COPERNICUS_USERNAME / COPERNICUS_PASSWORD. Register a free account at https://dataspace.copernicus.eu/ and add credentials to .env
+Traceback (most recent call last):
+  File "c:\Users\mayan\Downloads\files\main.py", line 902, in worker
+    paths = self.sentinel.download_historical(self.current_location)
+  File "c:\Users\mayan\Downloads\files\main.py", line 685, in download_historical
+    path = self.download_product(product)
+  File "c:\Users\mayan\Downloads\files\main.py", line 601, in download_product
+    token = self._authenticate()
+  File "c:\Users\mayan\Downloads\files\main.py", line 501, in _authenticate
+    raise CopernicusAuthError(
+    ...<2 lines>...
+    )
+CopernicusAuthError: Missing COPERNICUS_USERNAME / COPERNICUS_PASSWORD. Register a free account at https://dataspace.copernicus.eu/ and add credentials to .env
+
+2026-07-04 21:30:53 | INFO     | aina | Found 5 matching Sentinel-2 product(s).
+2026-07-04 21:30:53 | ERROR    | aina | Download failed: Missing COPERNICUS_USERNAME / COPERNICUS_PASSWORD. Register a free account at https://dataspace.copernicus.eu/ and add credentials to .env
+Traceback (most recent call last):
+  File "c:\Users\mayan\Downloads\files\main.py", line 882, in worker
+    path = self.sentinel.download_latest(self.current_location)
+  File "c:\Users\mayan\Downloads\files\main.py", line 655, in download_latest
+    return self.download_product(products[0])
+           ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^
+  File "c:\Users\mayan\Downloads\files\main.py", line 601, in download_product
+    token = self._authenticate()
+  File "c:\Users\mayan\Downloads\files\main.py", line 501, in _authenticate
+    raise CopernicusAuthError(
+    ...<2 lines>...
+    )
+CopernicusAuthError: Missing COPERNICUS_USERNAME / COPERNICUS_PASSWORD. Register a free account at https://dataspace.copernicus.eu/ and add credentials to .env
+

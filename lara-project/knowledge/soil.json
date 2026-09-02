@@ -1,0 +1,38 @@
+{
+  "soils": [
+
+    {
+      "name": "Sandy",
+      "water_holding": "Low",
+      "fertility": "Low",
+      "good_for": [
+        "Pearl Millet",
+        "Groundnut",
+        "Watermelon"
+      ]
+    },
+
+    {
+      "name": "Sandy Loam",
+      "water_holding": "Moderate",
+      "fertility": "Moderate",
+      "good_for": [
+        "Mahangu",
+        "Cowpea",
+        "Maize",
+        "Groundnut"
+      ]
+    },
+
+    {
+      "name": "Clay",
+      "water_holding": "High",
+      "fertility": "High",
+      "good_for": [
+        "Rice",
+        "Sugarcane"
+      ]
+    }
+
+  ]
+}

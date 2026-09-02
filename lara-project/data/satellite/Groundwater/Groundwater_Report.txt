@@ -1,0 +1,21 @@
+GROUNDWATER ANALYSIS REPORT
+====================================
+
+Elevation               : 1151.00 m
+Minimum Depth           : 60.00 m
+Maximum Depth           : 60.00 m
+Average Depth           : 60.00 m
+Median Depth            : 60.00 m
+Standard Deviation      : 0.00
+Recharge Potential      : 40.00%
+
+GROUNDWATER INTERPRETATION
+------------------------------------
+Groundwater is very deep.
+Hydrogeological investigation recommended before drilling.
+
+Recharge Assessment
+------------------------------------
+Moderate recharge potential.
+
+LARA Groundwater Module
