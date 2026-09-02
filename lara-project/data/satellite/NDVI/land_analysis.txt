@@ -1,0 +1,14 @@
+LAND ANALYSIS
+
+Total Pixels : 289
+Water : 0
+Bare Land : 269
+Sparse Vegetation : 20
+Moderate Vegetation : 0
+Dense Vegetation : 0
+
+Water % : 0.00
+Bare Land % : 93.08
+Sparse % : 6.92
+Moderate % : 0.00
+Dense % : 0.00

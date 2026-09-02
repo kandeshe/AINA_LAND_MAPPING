@@ -1,0 +1,5 @@
+========== ASPECT ==========
+
+Minimum : 0.00
+Maximum : 359.98
+Average : 199.40

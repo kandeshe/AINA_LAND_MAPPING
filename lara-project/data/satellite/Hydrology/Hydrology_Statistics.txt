@@ -1,0 +1,9 @@
+HYDROLOGY REPORT
+============================
+
+Minimum Flow Accumulation : 1.00
+Maximum Flow Accumulation : 8.00
+Average Flow Accumulation : 1.91
+Median Flow Accumulation  : 1.00
+Standard Deviation        : 1.28
+Stream Threshold          : 4.55

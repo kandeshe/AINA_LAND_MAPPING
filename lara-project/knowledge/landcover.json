@@ -1,0 +1,30 @@
+{
+  "classes": [
+
+    {
+      "name": "Water",
+      "description": "Permanent or seasonal water."
+    },
+
+    {
+      "name": "Bare Land",
+      "description": "No vegetation."
+    },
+
+    {
+      "name": "Sparse Vegetation",
+      "description": "Early crop growth or dry vegetation."
+    },
+
+    {
+      "name": "Moderate Vegetation",
+      "description": "Healthy crops."
+    },
+
+    {
+      "name": "Dense Vegetation",
+      "description": "Forest or dense crops."
+    }
+
+  ]
+}

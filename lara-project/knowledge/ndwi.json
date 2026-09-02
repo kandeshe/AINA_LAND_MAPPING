@@ -1,0 +1,32 @@
+{
+  "name": "NDWI",
+  "description": "Normalized Difference Water Index measures moisture and water content in vegetation and soil.",
+
+  "ranges": [
+    {
+      "min": -1.0,
+      "max": 0.0,
+      "meaning": "Dry land with very little moisture."
+    },
+    {
+      "min": 0.0,
+      "max": 0.2,
+      "meaning": "Low moisture."
+    },
+    {
+      "min": 0.2,
+      "max": 0.4,
+      "meaning": "Moderate moisture."
+    },
+    {
+      "min": 0.4,
+      "max": 1.0,
+      "meaning": "High moisture or water body."
+    }
+  ],
+
+  "recommendation": [
+    "Higher NDWI indicates better moisture availability.",
+    "Very low NDWI may indicate drought stress."
+  ]
+}

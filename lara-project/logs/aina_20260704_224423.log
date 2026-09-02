@@ -1,0 +1,4 @@
+2026-07-04 22:44:23 | INFO     | aina | Logging initialised. Log file: D:\aina-project\logs\aina_20260704_224423.log
+2026-07-04 22:44:23 | INFO     | aina | No analysis reports found yet in D:\aina-project\outputs\dashboard
+2026-07-04 22:44:23 | INFO     | aina | FactRetriever built over 20 facts (tfidf=True)
+2026-07-04 22:44:23 | INFO     | aina | Chatbot context not found - no analysis report exists yet (0 report facts + 20 glossary facts indexed).

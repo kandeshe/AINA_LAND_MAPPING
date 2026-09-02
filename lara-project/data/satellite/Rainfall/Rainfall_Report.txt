@@ -1,0 +1,24 @@
+RAINFALL ANALYSIS REPORT
+==============================
+
+Annual Rainfall : 252.10 mm
+Average Monthly Rainfall : 21.01 mm
+Maximum Monthly Rainfall : 90.50 mm
+Minimum Monthly Rainfall : 0.00 mm
+Wettest Month : January
+Driest Month : May
+
+Monthly Rainfall
+------------------------------
+January      : 90.50 mm
+February     : 41.40 mm
+March        : 7.80 mm
+April        : 26.80 mm
+May          : 0.00 mm
+June         : 0.00 mm
+July         : 0.00 mm
+August       : 0.00 mm
+September    : 0.00 mm
+October      : 0.40 mm
+November     : 23.80 mm
+December     : 61.40 mm

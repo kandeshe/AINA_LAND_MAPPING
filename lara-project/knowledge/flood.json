@@ -1,0 +1,22 @@
+{
+  "name": "Flood Risk",
+
+  "levels": [
+
+    {
+      "name": "Low",
+      "description": "Flooding is unlikely."
+    },
+
+    {
+      "name": "Moderate",
+      "description": "Occasional flooding may occur."
+    },
+
+    {
+      "name": "High",
+      "description": "Flooding is frequent."
+    }
+
+  ]
+}

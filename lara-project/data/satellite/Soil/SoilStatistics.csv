@@ -1,0 +1,7 @@
+Layer,Unit,Minimum,Maximum,Mean,Median,Std Dev
+Soil pH,pH,6.8,6.8,6.8,6.8,0.0
+Nitrogen,g/kg,0.89,0.89,0.89,0.89,0.0
+Clay,%,6.6,6.6,6.6,6.6,0.0
+Silt,%,4.8,4.8,4.8,4.8,0.0
+Bulk Density,kg/dm³,1.5,1.5,1.5,1.5,0.0
+Cation Exchange Capacity,cmol(c)/kg,18.2,18.2,18.2,18.2,0.0

@@ -1,0 +1,31 @@
+{
+  "name": "Rainfall",
+
+  "ranges": [
+    {
+      "min": 0,
+      "max": 250,
+      "meaning": "Very low rainfall."
+    },
+    {
+      "min": 250,
+      "max": 500,
+      "meaning": "Low rainfall."
+    },
+    {
+      "min": 500,
+      "max": 800,
+      "meaning": "Moderate rainfall."
+    },
+    {
+      "min": 800,
+      "max": 1200,
+      "meaning": "High rainfall."
+    }
+  ],
+
+  "recommendation": [
+    "Low rainfall areas require drought-resistant crops.",
+    "High rainfall supports water-demanding crops."
+  ]
+}
