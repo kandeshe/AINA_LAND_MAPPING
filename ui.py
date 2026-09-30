@@ -83,6 +83,7 @@ class MainWindow(QMainWindow):
         self.build_ui()
         self.ai = AIAdvisor()
         self.analysis_result = None
+        self.analysis_running = False
         #self.searchButton.clicked.connect(self.search_location)
         self.analyzeButton.clicked.connect(self.run_analysis_clicked)
         self.askButton.clicked.connect(
@@ -960,6 +961,16 @@ class MainWindow(QMainWindow):
 
     def run_analysis_clicked(self):
 
+        if self.analysis_running:
+            QMessageBox.information(
+                self,
+                "LARA",
+                "An analysis is already running. Please wait for it to finish."
+            )
+            return
+
+        self.analysis_running = True
+
         self.analyzeButton.setEnabled(False)
         self.analyzeButton.setText("Analyzing...")
 
@@ -1039,7 +1050,7 @@ class MainWindow(QMainWindow):
             )
 
         finally:
-
+            self.analysis_running = False
             self.analyzeButton.setEnabled(True)
             self.analyzeButton.setText("Analyze")
 
@@ -1096,6 +1107,15 @@ class MainWindow(QMainWindow):
 
             "cnn_landcover": self.analysis_result.get(
                 "cnn_landcover",
+                {}
+            ),
+            
+            # =====================================================
+            # DECISION TREE AGRICULTURAL PREDICTION
+            # =====================================================
+
+            "decision_tree": self.analysis_result.get(
+                "decision_tree",
                 {}
             ),
 
