@@ -93,7 +93,7 @@ def generate_climate(config):
     )
         
     plt.close()
-    print("Saved:", "D:/LARA-project/data/satellite/Climate")
+    print("Saved:", "C:/Users/kande/Downloads/lara-project with cnn(2)/lara-project/data/satellite/Climate")
     print("Temperature Image Saved")
 
     print("Generating Climate Zones...")
