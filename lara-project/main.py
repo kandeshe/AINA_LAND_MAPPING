@@ -6,6 +6,7 @@ import numpy as np
 from PIL import Image
 import math
 from pathlib import Path
+from modules.decision_tree import decision_tree
 from modules.terrain import generate_terrain
 import planetary_computer
 import pystac_client
@@ -23,6 +24,10 @@ from modules.rainfall.rainfall import generate_rainfall
 from modules.groundwater.groundwater import generate_groundwater
 from modules.flood.flood import generate_flood
 from cnn.predict import predict_scene
+from modules.bush_density import (
+    calculate_bushiness_from_cnn,
+    combine_with_ndvi
+)
 
 def run_analysis(
     LAT,
@@ -54,7 +59,7 @@ def run_analysis(
     # )
 
     PREVIEW_AREA_ACRES = 100
-    OUTPUT_FOLDER = r"C:\Users\kande\Downloads\lara-project with cnn(2)\lara-project\data\satellite"
+    OUTPUT_FOLDER = r"C:\Users\kande\Downloads\lara-project with cnn(2)\LARA-project\data\satellite"
 
     START_DATE = "2024-01-01"
     END_DATE = "2026-12-31"
@@ -446,6 +451,58 @@ def run_analysis(
     max_ndvi = float(np.max(ndvi))
     min_ndvi = float(np.min(ndvi))
 
+        # ======================================================
+    # BUSH DENSITY / BUSHINESS ASSESSMENT
+    # ======================================================
+
+    print("\n========== BUSH DENSITY ASSESSMENT ==========\n")
+
+    bush_result = {
+        "available": False,
+        "prediction": "Unavailable",
+        "score": None,
+        "confidence": None
+    }
+
+    try:
+        bush_result = calculate_bushiness_from_cnn(
+            cnn_result
+        )
+
+        bush_result = combine_with_ndvi(
+            bush_result,
+            mean_ndvi
+        )
+
+        print(
+            "Bush Density:",
+            bush_result.get("prediction")
+        )
+
+        print(
+            "Bushiness Score:",
+            bush_result.get("score")
+        )
+
+        print(
+            "Bush Evidence Confidence:",
+            bush_result.get("confidence")
+        )
+
+    except Exception as e:
+        print(
+            "Bush density assessment failed:",
+            e
+        )
+
+        bush_result = {
+            "available": False,
+            "prediction": "Unavailable",
+            "score": None,
+            "confidence": None,
+            "error": str(e)
+        }
+        
     # save statistics
 
     with open(ndvi_folder / "ndvi_statistics.txt", "w") as f:
@@ -756,7 +813,8 @@ def run_analysis(
 
         "epsg": epsg
     }
-
+    soil_result = None
+    climate_result = None
     modules = [
     ("Terrain", generate_terrain),
     ("Hydrology", generate_hydrology),
@@ -770,13 +828,206 @@ def run_analysis(
     ]
 
     for name, func in modules:
-     try:
-        print(f"Running {name}...")
-        func(config)
-        print(f"{name} completed.")
-     except Exception as e:
-        print(f"{name} FAILED: {e}")
 
+        try:
+
+            print(
+                f"Running {name}..."
+            )
+
+            module_result = func(
+                config
+            )
+
+            if name == "Soil":
+
+                soil_result = module_result
+            if name == "Climate":
+                climate_result = module_result
+            print(
+                f"{name} completed."
+            )
+
+        except Exception as e:
+            print(
+                f"{name} FAILED: {e}"
+            )
+    # =========================================================
+    # DECISION TREE AGRICULTURAL PREDICTION
+    # =========================================================
+
+    decision_tree_result = {
+        "available": False,
+        "prediction": None,
+        "confidence": None,
+        "features": {}
+    }
+
+    try:
+
+        # -----------------------------------------------------
+        # Get annual rainfall from the generated report
+        # -----------------------------------------------------
+
+        rainfall_value = None
+
+        rainfall_report = (
+            Path(OUTPUT_FOLDER)
+            / "Rainfall"
+            / "Rainfall_Report.txt"
+        )
+
+        if rainfall_report.exists():
+
+            with open(
+                rainfall_report,
+                "r",
+                encoding="utf-8",
+                errors="ignore"
+            ) as f:
+
+                for line in f:
+
+                    line = line.strip()
+
+                    if line.startswith(
+                        "Annual Rainfall"
+                    ):
+
+                        value = (
+                            line.split(":")[-1]
+                            .replace("mm", "")
+                            .strip()
+                        )
+
+                        rainfall_value = float(value)
+                        break
+
+        # -----------------------------------------------------
+        # Prepare soil values
+        # -----------------------------------------------------
+
+        soil = (
+            soil_result
+            if isinstance(soil_result, dict)
+            else {}
+        )
+
+        # -----------------------------------------------------
+        # Prepare climate values
+        # -----------------------------------------------------
+
+        climate = (
+            climate_result
+            if isinstance(climate_result, dict)
+            else {}
+        )
+
+        temperature_value = climate.get(
+            "temperature"
+        )
+
+        # -----------------------------------------------------
+        # Build Decision Tree input
+        # -----------------------------------------------------
+
+        decision_tree_input = {
+
+            "rainfall": rainfall_value,
+
+            "temperature": temperature_value,
+
+            "soil": {
+
+                "ph": soil.get("ph"),
+
+                "organic_carbon":
+                    soil.get("organic_carbon"),
+
+                "nitrogen":
+                    soil.get("nitrogen"),
+
+                "clay":
+                    soil.get("clay"),
+
+                "sand":
+                    soil.get("sand"),
+
+                "silt":
+                    soil.get("silt")
+            },
+
+            "mean_ndvi": mean_ndvi
+        }
+
+        # -----------------------------------------------------
+        # Validate required inputs
+        # -----------------------------------------------------
+
+        required_values = [
+
+            rainfall_value,
+            temperature_value,
+            soil.get("ph"),
+            soil.get("organic_carbon"),
+            soil.get("nitrogen"),
+            soil.get("clay"),
+            soil.get("sand"),
+            soil.get("silt"),
+            mean_ndvi
+        ]
+
+        if all(
+            value is not None
+            for value in required_values
+        ):
+
+            decision_tree_result = (
+                decision_tree.predict(
+                    decision_tree_input
+                )
+            )
+
+        else:
+
+            print(
+                "\nDecision Tree skipped: "
+                "required environmental inputs are missing."
+            )
+
+    except Exception as e:
+
+        print(
+            "\nDecision Tree prediction error:",
+            e
+        )
+
+        decision_tree_result = {
+            "available": False,
+            "prediction": None,
+            "confidence": None,
+            "features": {}
+        }
+
+    print(
+        "\n========== DECISION TREE RESULT =========="
+    )
+
+    print(
+        "Prediction :",
+        decision_tree_result.get(
+            "prediction",
+            "Not available"
+        )
+    )
+
+    print(
+        "Confidence :",
+        decision_tree_result.get(
+            "confidence",
+            "Not available"
+        )
+    )
     mean_ndwi = float(np.nanmean(ndwi))
 
     results = {
@@ -791,53 +1042,67 @@ def run_analysis(
         "mean_savi": round(mean_savi, 3),
         "water_percent": round(water_percent, 2),
 
-         # NEW
+        "soil": soil_result,
+        "climate": climate_result,
+        "decision_tree": decision_tree_result,
         "total_pixels": int(total_pixels),
 
         "land_cover": {
-        "water": round((water / total_pixels) * 100, 2),
-        "bare": round((barren / total_pixels) * 100, 2),
-        "sparse": round((sparse / total_pixels) * 100, 2),
-        "moderate": round((moderate / total_pixels) * 100, 2),
-        "dense": round((dense / total_pixels) * 100, 2),
+            "water": round((water / total_pixels) * 100, 2),
+            "bare": round((barren / total_pixels) * 100, 2),
+            "sparse": round((sparse / total_pixels) * 100, 2),
+            "moderate": round((moderate / total_pixels) * 100, 2),
+            "dense": round((dense / total_pixels) * 100, 2),
         },
 
-         # ==================================================
+        # ==================================================
         # CNN LAND-COVER INFORMATION
         # ==================================================
 
         "cnn_landcover": cnn_result,
-        
+
+        # ==================================================
+        # BUSH DENSITY ASSESSMENT
+        # ==================================================
+
+        "bush_density": bush_result,
+
         # Existing image paths
         "rgb_image": str(Path(OUTPUT_FOLDER) / "RGB" / "rgb_preview.jpg"),
         "ndvi_image": str(Path(OUTPUT_FOLDER) / "NDVI" / "ndvi_preview.jpg"),
         "ndwi_image": str(Path(OUTPUT_FOLDER) / "NDWI" / "ndwi_preview.jpg"),
         "savi_image": str(Path(OUTPUT_FOLDER) / "SAVI" / "savi_preview.jpg"),
-        "classification_image": str(Path(OUTPUT_FOLDER) / "Classification" / "classification_preview.png"),
+        "classification_image": str(
+            Path(OUTPUT_FOLDER) / "Classification" / "classification_preview.png"
+        ),
+
         "terrain": {
-         "dem": str(Path(OUTPUT_FOLDER) / "Terrain" / "DEM.png"),
-         "hillshade": str(Path(OUTPUT_FOLDER) / "Terrain" / "Hillshade.png"),
-         "slope": str(Path(OUTPUT_FOLDER) / "Terrain" / "Slope.png"),
-         "aspect": str(Path(OUTPUT_FOLDER) / "Terrain" / "Aspect.png"),
-         "contours": str(Path(OUTPUT_FOLDER) / "Terrain" / "Contours.png"),
-         "tri": str(Path(OUTPUT_FOLDER) / "Terrain" / "TRI.png"),
-         },
-        "hydrology_image": str(Path(OUTPUT_FOLDER) / "Hydrology" / "FlowAccumulation.png"),
+            "dem": str(Path(OUTPUT_FOLDER) / "Terrain" / "DEM.png"),
+            "hillshade": str(Path(OUTPUT_FOLDER) / "Terrain" / "Hillshade.png"),
+            "slope": str(Path(OUTPUT_FOLDER) / "Terrain" / "Slope.png"),
+            "aspect": str(Path(OUTPUT_FOLDER) / "Terrain" / "Aspect.png"),
+            "contours": str(Path(OUTPUT_FOLDER) / "Terrain" / "Contours.png"),
+            "tri": str(Path(OUTPUT_FOLDER) / "Terrain" / "TRI.png"),
+        },
 
-        "groundwater_image": str(Path(OUTPUT_FOLDER) / "Groundwater" / "Groundwater_Depth.png"),
+        "hydrology_image": str(
+            Path(OUTPUT_FOLDER) / "Hydrology" / "FlowAccumulation.png"
+        ),
 
-        "flood_image": str(Path(OUTPUT_FOLDER) / "Flood" / "FloodRisk.png"),   
-          }
+        "groundwater_image": str(
+            Path(OUTPUT_FOLDER) / "Groundwater" / "Groundwater_Depth.png"
+        ),
+
+        "flood_image": str(
+            Path(OUTPUT_FOLDER) / "Flood" / "FloodRisk.png"
+        ),
+    }
 
     return results
 
-
-    
-
-
 if __name__ == "__main__":
-    run_analysis(
-        LAT=-1.2921,
-        LON=36.8219,
-        ANALYSIS_AREA_ACRES=1
-    )
+            run_analysis(
+            LAT=-1.24024,
+            LON=36.83127,
+            ANALYSIS_AREA_ACRES=1
+        )
