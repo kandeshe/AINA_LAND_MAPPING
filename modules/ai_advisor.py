@@ -3,6 +3,7 @@ from pathlib import Path
 from llama_cpp import Llama
 
 from modules.crop_rules import generate_recommendations
+from modules.decision_tree import decision_tree
 from modules.knowledge_loader import KnowledgeLoader
 
 
@@ -153,25 +154,38 @@ class AIAdvisor:
             }
 
 
-        crops = recommendations.get(
-            "crops",
-            []
-        )
+        # -----------------------------------------------------
+        # Decision Tree prediction
+        # -----------------------------------------------------
 
+        try:
 
-        vegetables = recommendations.get(
-            "vegetables",
-            []
-        )
-
-
-        soil_rehabilitation = (
-            recommendations.get(
-                "soil_rehabilitation",
-                []
+            # Use the Decision Tree result already calculated
+            # by main.py during the completed analysis.
+            decision_tree_result = analysis.get(
+                "decision_tree",
+                {}
             )
-        )
 
+            if not isinstance(
+                decision_tree_result,
+                dict
+            ):
+                decision_tree_result = {}
+
+        except Exception as e:
+
+            print(
+                "Decision Tree result retrieval error:",
+                e
+            )
+
+            decision_tree_result = {
+                "available": False,
+                "prediction": None,
+                "confidence": None,
+                "features": {}
+            }
 
         # =====================================================
         # QUESTION TYPE DETECTION
@@ -258,6 +272,49 @@ class AIAdvisor:
 
 
         # -----------------------------------------------------
+        # Decision Tree question
+        # -----------------------------------------------------
+
+        if self._is_decision_tree_question(q):
+
+            return self._decision_tree_answer(
+                analysis,
+                decision_tree_result
+            )
+
+
+        # -----------------------------------------------------
+        # Normal crop question
+        #
+        # Use the Decision Tree as an actual decision signal.
+        # Existing LARA crop rules remain the environmental
+        # screening layer. Phi-3 does not choose the crop here.
+        # -----------------------------------------------------
+
+        crop_keywords = [
+            "crop",
+            "crops",
+            "what crop",
+            "which crop",
+            "what crops",
+            "which crops",
+            "what should i grow",
+            "what can i grow",
+            "which crop should i grow"
+        ]
+
+        if any(
+            keyword in q
+            for keyword in crop_keywords
+        ):
+            return self._hybrid_crop_answer(
+                analysis,
+                crops,
+                decision_tree_result
+            )
+
+
+        # -----------------------------------------------------
         # Vegetable question
         # -----------------------------------------------------
 
@@ -290,8 +347,28 @@ class AIAdvisor:
 
         ):
 
-            return self._vegetable_answer(
-                vegetables
+            context = self._build_context(
+
+                analysis,
+
+                crops,
+
+                vegetables,
+
+                soil_rehabilitation,
+
+                decision_tree_result
+
+            )
+
+            return self._generate_agricultural_ai_response(
+
+                question,
+
+                context,
+
+                focus="vegetables"
+
             )
 
 
@@ -330,50 +407,28 @@ class AIAdvisor:
 
         ):
 
-            return self._soil_answer(
+            context = self._build_context(
 
-                soil_rehabilitation
+                analysis,
+
+                crops,
+
+                vegetables,
+
+                soil_rehabilitation,
+
+                decision_tree_result
 
             )
 
+            return self._generate_agricultural_ai_response(
 
-        # -----------------------------------------------------
-        # Normal crop question
-        # -----------------------------------------------------
+                question,
 
-        crop_keywords = [
+                context,
 
-            "crop",
+                focus="soil"
 
-            "crops",
-
-            "what crop",
-
-            "which crop",
-
-            "what crops",
-
-            "which crops",
-
-            "what should i grow",
-
-            "what can i grow",
-
-            "which crop should i grow"
-
-        ]
-
-
-        if any(
-
-            keyword in q
-
-            for keyword in crop_keywords
-
-        ):
-
-            return self._crop_answer(
-                crops
             )
 
 
@@ -389,7 +444,9 @@ class AIAdvisor:
 
             vegetables,
 
-            soil_rehabilitation
+            soil_rehabilitation,
+
+            decision_tree_result
 
         )
 
@@ -571,6 +628,269 @@ Give a clear, practical answer.
 
 
     # =========================================================
+    # AI AGRICULTURAL RESPONSE
+    # =========================================================
+
+    def _generate_agricultural_ai_response(
+    self,
+    question,
+    context,
+    focus="crops"
+    ):
+
+     if focus == "vegetables":
+
+      focus_instruction = """
+        The farmer is asking specifically about vegetables.
+
+        Do NOT simply list all vegetables.
+
+        From the LARA RECOMMENDED VEGETABLES list, identify the
+        BEST 1 to 3 options for the farmer's actual conditions.
+
+        Rank them:
+        1. Best option
+        2. Second option
+        3. Third option, only if useful
+
+        For each selected vegetable, explain briefly why it fits
+        the actual soil, rainfall, temperature and other available
+        conditions.
+
+        Do not recommend vegetables that are not in the LARA
+        RECOMMENDED VEGETABLES list.
+        """
+
+     elif focus == "soil":
+
+        focus_instruction = """
+        The farmer is asking about soil.
+
+        Explain the actual soil measurements in simple language.
+
+        Separate:
+        - What the measurements show
+        - What that means for farming
+        - What the farmer should pay attention to
+
+        Do not invent threshold values or nutrient interpretations
+        that are not supported by the supplied LARA data.
+        """
+
+     else:
+
+                focus_instruction = """
+        The farmer is asking about crops.
+
+        Do NOT simply list all recommended crops.
+
+        From the LARA RECOMMENDED CROPS list, identify the
+        BEST 1 to 3 options for the farmer's actual conditions.
+
+        Rank them:
+        1. Best option
+        2. Second option
+        3. Third option, only if useful
+
+        For each selected crop, explain briefly why it fits
+        the actual soil, rainfall, temperature and other available
+        conditions.
+
+        Do not recommend crops that are not in the LARA
+        RECOMMENDED CROPS list.
+        """
+
+     system_message = f"""
+        You are LARA, a practical agricultural advisor.
+
+        {focus_instruction}
+
+        IMPORTANT:
+
+        1. Use the actual LARA land-analysis data supplied in the context.
+
+        2. Never invent soil, rainfall, temperature, groundwater,
+        flood-risk, NDVI, NDWI or CNN values.
+
+        3. Never change a numerical value.
+
+        4. Soil pH must be interpreted correctly.
+
+        5. A pH of 7 is approximately neutral.
+        Values below 7 are acidic.
+        Values above 7 are alkaline.
+
+        6. Do not call soil alkaline when the supplied pH is acidic.
+
+        7. Do not call soil acidic when the supplied pH is alkaline.
+
+        8. Do not assume that a nutrient is deficient merely because
+        a number looks small. Only make a deficiency claim when
+        the LARA data or supplied interpretation supports it.
+
+        9. Do not automatically describe organic carbon as high,
+        medium or low unless the supplied LARA information
+        supports that interpretation.
+
+        10. Do not automatically describe nitrogen as deficient,
+            high or low unless the supplied LARA information
+            supports that interpretation.
+
+        11. Do not simply repeat the recommendation list.
+
+        12. Prioritize the strongest options.
+
+        13. Explain WHY the selected option fits the available data.
+
+        14. If two options are similarly suitable, say so.
+
+        15. If the available data is insufficient to rank options
+            confidently, clearly say that.
+
+        16. Do not guarantee crop success.
+
+        17. Consider soil pH, soil texture, nutrients, rainfall,
+            temperature, water availability, flood risk and
+            land suitability when those values are available.
+
+        18. CNN land-cover information is supporting image evidence only.
+
+        19. CNN does not directly measure soil properties.
+
+        20. CNN does not diagnose plant disease.
+
+        21. CNN does not determine legal land designation.
+
+        22. Do not combine CNN percentages with NDVI or NDWI percentages.
+
+        23. Do not invent fertilizer rates or chemical doses.
+
+        24. Mention soil testing when it would materially improve
+            the recommendation.
+
+        25. Answer naturally, like an agricultural advisor speaking
+            directly to a farmer.
+
+        26. Avoid generic phrases such as:
+            "These crops are suitable because they are resilient."
+
+        27. Use the actual numbers when they help explain the answer.
+
+        28. Do not mention that you are an AI model.
+
+        29. Keep the response practical and reasonably concise.
+        """
+
+     user_message = f"""
+        LARA LAND ANALYSIS:
+
+        {context}
+
+        FARMER QUESTION:
+
+        {question}
+
+        Answer the farmer directly.
+
+        IMPORTANT:
+        Do not just repeat the available recommendation list.
+
+        Select and prioritize the strongest option(s) based on
+        the actual LARA data.
+
+        Explain the reasoning using the actual measurements
+        where appropriate.
+
+        If the farmer asks for vegetables, discuss vegetables.
+
+        If the farmer asks for crops, discuss crops.
+
+        If the farmer asks about soil, explain the soil measurements
+        rather than giving a generic soil-management paragraph.
+        """
+
+     try:
+
+                response = self.llm.create_chat_completion(
+
+                    messages=[
+
+                        {
+                            "role": "system",
+                            "content": system_message
+                        },
+
+                        {
+                            "role": "user",
+                            "content": user_message
+                        }
+
+                    ],
+
+                    max_tokens=500,
+
+                    temperature=0.25,
+
+                    top_p=0.90,
+
+                    repeat_penalty=1.15,
+
+                    stop=[
+                        "<|end|>",
+                        "<|user|>",
+                        "<|assistant|>",
+                        "assistant.",
+                        "assistant:"
+                    ]
+                )
+
+                answer = (
+                    response["choices"][0]
+                    ["message"]
+                    ["content"]
+                    .strip()
+                )
+
+                if answer:
+                    return answer
+
+     except Exception as e:
+
+                print(
+                    "Agricultural AI response error:",
+                    e
+                )
+
+            # ---------------------------------------------------------
+            # SAFE FALLBACK
+            # ---------------------------------------------------------
+
+     if focus == "vegetables":
+
+        return (
+                    "<b>Vegetable Recommendation</b><br><br>"
+                    "LARA has identified suitable vegetable options "
+                    "from the current land analysis, but the detailed "
+                    "AI explanation is temporarily unavailable."
+                )
+
+     if focus == "soil":
+
+            return (
+                    "<b>Soil Assessment</b><br><br>"
+                    "LARA has soil-analysis information available, "
+                    "but the detailed AI explanation is temporarily "
+                    "unavailable."
+                )
+
+     return (
+                "<b>Crop Recommendation</b><br><br>"
+                "LARA has identified suitable crop options from "
+                "the current land analysis, but the detailed AI "
+                "explanation is temporarily unavailable."
+            )
+
+    # =========================================================
     # BUILD CONTEXT
     # =========================================================
 
@@ -584,7 +904,9 @@ Give a clear, practical answer.
 
         vegetables,
 
-        soil_rehabilitation
+        soil_rehabilitation,
+
+        decision_tree_result
 
     ):
 
@@ -803,6 +1125,45 @@ Give a clear, practical answer.
             )
 
 
+        # -----------------------------------------------------
+        # Decision Tree
+        # -----------------------------------------------------
+
+        if not isinstance(
+            decision_tree_result,
+            dict
+        ):
+            decision_tree_result = {}
+
+        dt_prediction = decision_tree_result.get(
+            "prediction",
+            None
+        )
+
+        if not dt_prediction:
+            dt_prediction = "Not available"
+
+        dt_confidence = decision_tree_result.get(
+            "confidence",
+            None
+        )
+
+        if dt_confidence is not None:
+            try:
+                dt_confidence_text = (
+                    f"{float(dt_confidence):.2f}%"
+                )
+            except (
+                TypeError,
+                ValueError
+            ):
+                dt_confidence_text = str(
+                    dt_confidence
+                )
+        else:
+            dt_confidence_text = "Not available"
+
+
         # =====================================================
         # CONTEXT
         # =====================================================
@@ -928,6 +1289,19 @@ LAND SUITABILITY
 {analysis.get("land_suitability", "Not available")}
 
 
+DECISION TREE AGRICULTURAL PREDICTION
+
+Predicted crop:
+{dt_prediction}
+
+Decision Tree confidence:
+{dt_confidence_text}
+
+The Decision Tree uses LARA environmental features as decision inputs.
+Its prediction is supporting decision evidence and is not a guarantee
+of crop performance.
+
+
 LARA RECOMMENDED CROPS
 
 {crop_text}
@@ -943,6 +1317,446 @@ SOIL REHABILITATION
 {rehabilitation_text}
 
 """
+
+
+    # =========================================================
+    # HYBRID CROP DECISION
+    # =========================================================
+
+    def _hybrid_crop_answer(
+        self,
+        analysis,
+        crops,
+        decision_tree_result
+    ):
+        """
+        Give a natural farmer-facing crop recommendation while
+        keeping the Decision Tree as an explicit supporting
+        decision model and the existing LARA rules as the
+        environmental screening layer.
+        """
+
+        result = (
+            decision_tree_result
+            if isinstance(decision_tree_result, dict)
+            else {}
+        )
+
+        prediction = result.get("prediction")
+        confidence = result.get("confidence")
+
+        candidates = []
+
+        if isinstance(crops, list):
+            for crop in crops:
+                name = str(crop).strip()
+                if name and name not in candidates:
+                    candidates.append(name)
+
+        final_crop = None
+        tree_agrees = False
+
+        # Prefer the Decision Tree when its prediction is also
+        # present in the existing LARA recommendation list.
+        if prediction:
+            predicted = str(prediction).strip().lower()
+
+            for candidate in candidates:
+                current = candidate.lower()
+                if (
+                    current == predicted
+                    or predicted in current
+                    or current in predicted
+                ):
+                    final_crop = candidate
+                    tree_agrees = True
+                    break
+
+        # If the tree and rule layer do not overlap, keep the
+        # existing LARA recommendation rather than inventing a crop.
+        if final_crop is None and candidates:
+            final_crop = candidates[0]
+
+        soil = analysis.get("soil", {})
+        if not isinstance(soil, dict):
+            soil = {}
+
+        rainfall = analysis.get("rainfall")
+        temperature = analysis.get("temperature")
+        ph = soil.get("ph")
+        ndvi = analysis.get("mean_ndvi")
+        flood = analysis.get("flood_risk")
+        sand = soil.get("sand")
+
+        # ---------------------------------------------------------
+        # Build a short, natural explanation from actual values.
+        # ---------------------------------------------------------
+
+        reasons = []
+
+        if rainfall is not None:
+            try:
+                rain = float(rainfall)
+                if rain < 300:
+                    reasons.append(
+                        f"the current rainfall estimate is quite low at {rain:.1f} mm, so a lower-water crop is more sensible"
+                    )
+                elif rain <= 800:
+                    reasons.append(
+                        f"the current rainfall estimate is about {rain:.1f} mm, which is within a range used by LARA for several field crops"
+                    )
+                else:
+                    reasons.append(
+                        f"the current rainfall estimate is about {rain:.1f} mm, so water availability is less of a limiting signal"
+                    )
+            except (TypeError, ValueError):
+                pass
+
+        if ph is not None:
+            try:
+                p = float(ph)
+                if p < 5.5:
+                    reasons.append(
+                        f"the soil is acidic at pH {p:.2f}"
+                    )
+                elif p <= 7.5:
+                    reasons.append(
+                        f"the soil pH is {p:.2f}, which is in a broadly suitable range"
+                    )
+                else:
+                    reasons.append(
+                        f"the soil is slightly alkaline at pH {p:.2f}"
+                    )
+            except (TypeError, ValueError):
+                pass
+
+        if flood not in (None, "", "Not available"):
+            flood_text = str(flood).strip().lower()
+            if flood_text == "low":
+                reasons.append("the current flood-risk assessment is low")
+            else:
+                reasons.append(
+                    f"the current flood-risk assessment is {flood_text}"
+                )
+
+        if sand is not None:
+            try:
+                sand_value = float(sand)
+                if sand_value >= 40:
+                    reasons.append(
+                        f"the soil is relatively sandy at {sand_value:.1f}%"
+                    )
+            except (TypeError, ValueError):
+                pass
+
+        if ndvi is not None:
+            try:
+                ndvi_value = float(ndvi)
+                if ndvi_value < 0.2:
+                    reasons.append(
+                        f"the current vegetation signal is low (NDVI {ndvi_value:.3f})"
+                    )
+                elif ndvi_value >= 0.5:
+                    reasons.append(
+                        f"the current vegetation signal is relatively strong (NDVI {ndvi_value:.3f})"
+                    )
+            except (TypeError, ValueError):
+                pass
+
+        # ---------------------------------------------------------
+        # Farmer-facing response
+        # ---------------------------------------------------------
+
+        if final_crop:
+            html = (
+                "<b>🌱 My recommendation</b><br><br>"
+                f"Looking at the LARA analysis for this field, "
+                f"I'd lean toward <b>{final_crop}</b>."
+            )
+
+            if reasons:
+                # Keep the answer conversational rather than turning
+                # every factor into a technical bullet list.
+                if len(reasons) == 1:
+                    reason_text = reasons[0] + "."
+                elif len(reasons) == 2:
+                    reason_text = reasons[0] + ", and " + reasons[1] + "."
+                else:
+                    reason_text = ", ".join(reasons[:-1]) + ", and " + reasons[-1] + "."
+
+                html += (
+                    " The main reason is that "
+                    + reason_text
+                )
+
+            if prediction:
+                if tree_agrees:
+                    html += (
+                        " The Decision Tree also points to "
+                        + str(prediction)
+                        + ", so the machine-learning result and LARA's environmental screening are in agreement."
+                    )
+                else:
+                    html += (
+                        " The Decision Tree points to "
+                        + str(prediction)
+                        + ", but that crop is not in the current LARA recommendation list, so I have kept the LARA screening result rather than forcing the model's choice."
+                    )
+
+            alternatives = []
+            for crop in candidates:
+                if crop.lower() == str(final_crop).lower():
+                    continue
+                alternatives.append(crop)
+                if len(alternatives) >= 2:
+                    break
+
+            if alternatives:
+                html += (
+                    " Based on the same analysis, "
+                    + ", ".join(alternatives)
+                    + " would be the next options to consider."
+                )
+
+            html += (
+                "<br><br><b>One caution:</b> this is a model-based recommendation, "
+                "not a guarantee of yield. In particular, actual seasonal rainfall, "
+                "water access and field conditions should be checked before planting."
+            )
+
+            return html
+
+        return (
+            "<b>🌱 Crop recommendation</b><br><br>"
+            "I don't have enough usable LARA crop information to make a reliable "
+            "recommendation for this field yet."
+        )
+
+
+    # =========================================================
+    # DECISION TREE QUESTION DETECTOR
+    # =========================================================
+
+    def _is_decision_tree_question(
+        self,
+        question
+    ):
+
+        keywords = [
+
+            "decision tree",
+
+            "decision-tree",
+
+            "decisiontree",
+
+            "tree model",
+
+            "tree prediction",
+
+            "tree recommends",
+
+            "tree recommendation",
+
+            "recommended by the decision tree",
+
+            "which crop does the decision tree recommend",
+
+            "what does the decision tree recommend"
+
+        ]
+
+
+        return any(
+            keyword in question
+            for keyword in keywords
+        )
+
+
+    # =========================================================
+    # DECISION TREE ANSWER
+    # =========================================================
+
+    def _decision_tree_answer(
+        self,
+        analysis,
+        decision_tree_result
+    ):
+
+        result = (
+            decision_tree_result
+            if isinstance(
+                decision_tree_result,
+                dict
+            )
+            else {}
+        )
+
+        available = result.get(
+            "available",
+            False
+        )
+
+        prediction = result.get(
+            "prediction",
+            None
+        )
+
+        confidence = result.get(
+            "confidence",
+            None
+        )
+
+        html = (
+            "<b>🌳 LARA Decision Tree Result</b>"
+            "<br><br>"
+        )
+
+        if not available or not prediction:
+
+            html += (
+                "The Decision Tree model is not currently "
+                "available for this analysis."
+            )
+
+            return html
+
+        html += (
+            "<b>Predicted crop:</b> "
+            + str(prediction)
+            + "<br>"
+        )
+
+        if confidence is not None:
+
+            try:
+
+                html += (
+                    "<b>Model confidence:</b> "
+                    f"{float(confidence):.2f}%"
+                    "<br>"
+                )
+
+            except (
+                TypeError,
+                ValueError
+            ):
+
+                html += (
+                    "<b>Model confidence:</b> "
+                    + str(confidence)
+                    + "<br>"
+                )
+
+        html += "<br>"
+
+        html += (
+            "<b>How LARA arrived at this prediction:</b><br>"
+            "The Decision Tree uses the environmental "
+            "features already available in LARA, including "
+            "rainfall, temperature, soil pH, nitrogen, "
+            "organic carbon, clay, sand, silt and NDVI."
+            "<br><br>"
+        )
+
+        features = result.get(
+            "features",
+            {}
+        )
+
+        if isinstance(
+            features,
+            dict
+        ):
+
+            feature_lines = []
+
+            labels = {
+
+                "rainfall":
+                    "Rainfall",
+
+                "temperature":
+                    "Temperature",
+
+                "ph":
+                    "Soil pH",
+
+                "nitrogen":
+                    "Nitrogen",
+
+                "organic_carbon":
+                    "Organic carbon",
+
+                "clay":
+                    "Clay",
+
+                "sand":
+                    "Sand",
+
+                "silt":
+                    "Silt",
+
+                "ndvi":
+                    "NDVI"
+
+            }
+
+            for key, label in labels.items():
+
+                if key not in features:
+                    continue
+
+                value = features.get(
+                    key
+                )
+
+                try:
+
+                    if key == "rainfall":
+                        text = f"{float(value):.1f} mm"
+
+                    elif key == "temperature":
+                        text = f"{float(value):.1f} °C"
+
+                    elif key == "ndvi":
+                        text = f"{float(value):.3f}"
+
+                    else:
+                        text = f"{float(value):.2f}"
+
+                except (
+                    TypeError,
+                    ValueError
+                ):
+
+                    text = str(value)
+
+                feature_lines.append(
+                    f"• {label}: {text}"
+                )
+
+            if feature_lines:
+
+                html += (
+                    "<b>Decision inputs:</b><br>"
+                    + "<br>".join(
+                        feature_lines
+                    )
+                    + "<br><br>"
+                )
+
+        html += (
+            "<b>Important:</b><br>"
+            "The confidence shown here is the Decision "
+            "Tree's model confidence for this input. It "
+            "does not mean that crop success is guaranteed. "
+            "The prediction should be considered together "
+            "with the other LARA environmental analysis and "
+            "local agricultural conditions."
+        )
+
+        return html
 
 
     # =========================================================
@@ -2491,9 +3305,8 @@ SOIL REHABILITATION
 
         q = question.lower()
 
-
         # -----------------------------------------------------
-        # Soil
+        # Soil and field information
         # -----------------------------------------------------
 
         soil = analysis.get(
@@ -2501,44 +3314,36 @@ SOIL REHABILITATION
             {}
         )
 
-
         if not isinstance(
             soil,
             dict
         ):
-
             soil = {}
-
 
         ph = soil.get(
             "ph",
             None
         )
 
-
         nitrogen = soil.get(
             "nitrogen",
             None
         )
-
 
         sand = soil.get(
             "sand",
             None
         )
 
-
         rainfall = analysis.get(
             "rainfall",
             None
         )
 
-
         flood = analysis.get(
             "flood_risk",
             "Not available"
         )
-
 
         # -----------------------------------------------------
         # Crop dictionary
@@ -2593,13 +3398,11 @@ SOIL REHABILITATION
 
         }
 
-
         # -----------------------------------------------------
-        # Previous crops
+        # Identify crops mentioned by the farmer
         # -----------------------------------------------------
 
         previous = []
-
 
         for keyword, crop in known_crops.items():
 
@@ -2610,7 +3413,6 @@ SOIL REHABILITATION
                     previous.append(
                         crop
                     )
-
 
         # -----------------------------------------------------
         # Explicit restrictions
@@ -2640,18 +3442,12 @@ SOIL REHABILITATION
 
         ]
 
-
         has_restriction = any(
-
             item in q
-
             for item in restrictions
-
         )
 
-
         excluded = []
-
 
         if has_restriction:
 
@@ -2665,13 +3461,11 @@ SOIL REHABILITATION
                             crop
                         )
 
-
         # -----------------------------------------------------
-        # Everything previously grown is blocked.
+        # Block crops already grown
         # -----------------------------------------------------
 
         blocked = []
-
 
         for crop in previous:
 
@@ -2681,7 +3475,6 @@ SOIL REHABILITATION
                     crop
                 )
 
-
         for crop in excluded:
 
             if crop not in blocked:
@@ -2690,13 +3483,11 @@ SOIL REHABILITATION
                     crop
                 )
 
-
         # -----------------------------------------------------
-        # Filter actual LARA recommendations
+        # Keep only crops already recommended by LARA
         # -----------------------------------------------------
 
         candidates = []
-
 
         for crop in crops:
 
@@ -2704,14 +3495,10 @@ SOIL REHABILITATION
                 crop
             ).strip()
 
-
             if not name:
-
                 continue
 
-
             is_blocked = False
-
 
             for blocked_crop in blocked:
 
@@ -2721,25 +3508,15 @@ SOIL REHABILITATION
                     blocked_crop.lower()
                 )
 
-
                 if (
-
                     current == blocked_name
-
                     or
-
                     blocked_name in current
-
                     or
-
                     current in blocked_name
-
                 ):
-
                     is_blocked = True
-
                     break
-
 
             if not is_blocked:
 
@@ -2749,9 +3526,8 @@ SOIL REHABILITATION
                         name
                     )
 
-
         # -----------------------------------------------------
-        # Priority
+        # Rotation preference
         # -----------------------------------------------------
 
         preferred = [
@@ -2772,9 +3548,7 @@ SOIL REHABILITATION
 
         ]
 
-
         recommendation = None
-
 
         for item in preferred:
 
@@ -2787,166 +3561,181 @@ SOIL REHABILITATION
                 ):
 
                     recommendation = candidate
-
                     break
 
-
             if recommendation:
-
                 break
 
+        if recommendation is None and candidates:
 
-        if recommendation is None:
-
-            if candidates:
-
-                recommendation = candidates[0]
-
+            recommendation = candidates[0]
 
         # -----------------------------------------------------
-        # Response
+        # HUMAN-FRIENDLY RESPONSE
         # -----------------------------------------------------
 
         html = (
-
-            "<b>Crop Rotation Guidance</b>"
-            "<br><br>"
-
+            "<b>🌱 Crop Rotation Advice</b><br><br>"
         )
-
 
         if previous:
 
             html += (
-
-                "<b>Previous crop(s):</b> "
-
-                +
-
-                ", ".join(previous)
-
-                +
-
-                "<br>"
-
+                "You previously grew "
+                + ", ".join(previous)
+                + ". "
             )
 
+            if len(previous) == 1:
+                html += (
+                    "I would avoid putting the same crop straight "
+                    "back into the field if you are planning a rotation."
+                )
+            else:
+                html += (
+                    "I would avoid putting those crops straight back "
+                    "into the field if you are planning a rotation."
+                )
 
-        if excluded:
-
-            html += (
-
-                "<b>Excluded:</b> "
-
-                +
-
-                ", ".join(excluded)
-
-                +
-
-                "<br>"
-
-            )
-
-
-        html += "<br>"
-
+            html += "<br><br>"
 
         if recommendation:
 
             html += (
-
-                "<b>Suggested next crop:</b> "
-
-                +
-
-                recommendation
-
-                +
-
-                "<br><br>"
-
+                "<b>My next choice: "
+                + recommendation
+                + "</b><br><br>"
             )
+
+            html += (
+                "Based on the field information available to LARA, "
+                + recommendation
+                + " looks like a reasonable next crop for this field."
+            )
+
+            # Build only useful, meaningful reasons.
+            reasons = []
+
+            if ph is not None:
+
+                try:
+                    ph_value = float(ph)
+
+                    if 5.5 <= ph_value <= 7.5:
+                        reasons.append(
+                            f"the soil pH is {ph_value:g}, which is in a generally suitable range"
+                        )
+                    elif ph_value < 5.5:
+                        reasons.append(
+                            f"the soil is acidic, with a pH of {ph_value:g}"
+                        )
+                    else:
+                        reasons.append(
+                            f"the soil is alkaline, with a pH of {ph_value:g}"
+                        )
+
+                except (
+                    TypeError,
+                    ValueError
+                ):
+                    pass
+
+            if rainfall is not None:
+                try:
+                    rainfall_value = float(rainfall)
+                    reasons.append(
+                        f"annual rainfall is about {rainfall_value:.1f} mm"
+                    )
+                except (
+                    TypeError,
+                    ValueError
+                ):
+                    reasons.append(
+                        f"the available rainfall estimate is {rainfall} mm"
+                    )
+
+            if flood is not None:
+
+                flood_text = str(
+                    flood
+                ).strip()
+
+                if flood_text.lower() not in {
+                    "",
+                    "none",
+                    "not available",
+                    "unknown"
+                }:
+
+                    if flood_text.lower() == "low":
+                        reasons.append(
+                            "the current flood-risk assessment is low"
+                        )
+                    else:
+                        reasons.append(
+                            f"the current flood-risk assessment is {flood_text.lower()}"
+                        )
+
+            if reasons:
+
+                html += (
+                    "<br><br><b>Why it fits:</b> "
+                    + ", ".join(reasons)
+                    + "."
+                )
+
+            soil_details = []
+
+            if nitrogen is not None:
+                soil_details.append(
+                    f"nitrogen is {nitrogen}"
+                )
+
+            if sand is not None:
+                try:
+                    sand_value = float(sand)
+                    soil_details.append(
+                        f"sand content is {sand_value:.1f}%"
+                    )
+                except (
+                    TypeError,
+                    ValueError
+                ):
+                    soil_details.append(
+                        f"sand content is {sand}%"
+                    )
+
+            if soil_details:
+                html += (
+                    "<br><br>The soil analysis also shows "
+                    + " and ".join(soil_details)
+                    + "."
+                )
+
+            if previous:
+                html += (
+                    "<br><br>So, rather than immediately repeating "
+                    + ", ".join(previous)
+                    + ", "
+                    + recommendation
+                    + " gives you a different crop in the rotation while still fitting the current LARA assessment."
+                )
 
         else:
 
             html += (
-
-                "<b>Suggested next crop:</b> "
-
-                "No suitable alternative was found "
-                "in the current LARA recommendation list."
-
-                "<br><br>"
-
+                "I couldn't find a suitable next crop among the crops "
+                "currently recommended by LARA for this field. "
+                "I would not force a rotation choice without a stronger "
+                "match to the field conditions."
             )
-
 
         html += (
-
-            "<b>Why:</b><br>"
-
-            "• Previous crops have been excluded from "
-            "the immediate next-crop recommendation.<br>"
-
-            "• The alternative is selected from crops "
-            "already recommended by LARA for this land.<br>"
-
+            "<br><br><b>Keep in mind:</b> This is a LARA-based recommendation "
+            "using the available field data and your cropping history. "
+            "Before planting, it is still worth considering the local field "
+            "condition, variety, irrigation and soil-test results."
         )
-
-
-        if ph is not None:
-
-            html += (
-
-                f"• Soil pH: {ph}.<br>"
-
-            )
-
-
-        if nitrogen is not None:
-
-            html += (
-
-                f"• Soil nitrogen: {nitrogen}.<br>"
-
-            )
-
-
-        if sand is not None:
-
-            html += (
-
-                f"• Sand content: {sand}.<br>"
-
-            )
-
-
-        if rainfall is not None:
-
-            html += (
-
-                f"• Annual rainfall: "
-                f"{rainfall} mm.<br>"
-
-            )
-
-
-        html += (
-
-            f"• Flood risk: {flood}.<br>"
-            "<br>"
-
-            "<b>Important:</b><br>"
-
-            "This recommendation is based on the available "
-            "LARA land-analysis data and the farmer's stated "
-            "cropping history. Final crop selection should "
-            "also consider local agronomic conditions, "
-            "field observations and soil testing."
-
-        )
-
 
         return html
 
