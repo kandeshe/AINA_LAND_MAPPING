@@ -2,6 +2,9 @@ from modules.terrain_visualization import (
     generate_dem_image,
     generate_hillshade
 )
+from modules.location_confusion_matrix import (
+    generate_location_confusion_matrix
+)
 import numpy as np
 from PIL import Image
 import math
@@ -28,6 +31,7 @@ from modules.bush_density import (
     calculate_bushiness_from_cnn,
     combine_with_ndvi
 )
+
 
 def run_analysis(
     LAT,
@@ -371,6 +375,41 @@ def run_analysis(
             "status": "failed",
             "error": str(e)
         }
+      
+        # ======================================================
+    # LOCATION-LEVEL CNN CONSISTENCY EVALUATION
+    # ======================================================
+    location_evaluation = {
+        "status": "skipped",
+        "error": "CNN prediction did not complete successfully."
+    }
+
+    if isinstance(cnn_result, dict) and cnn_result.get("status") != "failed":
+        try:
+            print("\nGenerating location confusion matrix...")
+
+            location_evaluation = generate_location_confusion_matrix(
+                output_folder=OUTPUT_FOLDER,
+                latitude=float(LAT),
+                longitude=float(LON)
+            )
+
+            print("Location-level CNN evaluation completed.")
+            print("Location evaluation result:", location_evaluation)
+
+        except Exception as e:
+            import traceback
+
+            print("\n========== LOCATION EVALUATION ERROR ==========")
+            traceback.print_exc()
+            print("================================================")
+
+            location_evaluation = {
+                "status": "failed",
+                "error": str(e)
+            }
+    else:
+        print("Location evaluation skipped because CNN prediction failed.")
 
     # ==========================================
     # LOAD ANALYSIS BANDS
@@ -1036,7 +1075,7 @@ def run_analysis(
         "longitude": LON,
         "area": ANALYSIS_AREA_ACRES,
         "elevation": "-",
-
+           
         "mean_ndvi": round(mean_ndvi, 3),
         "mean_ndwi": round(mean_ndwi, 3),
         "mean_savi": round(mean_savi, 3),
@@ -1046,7 +1085,6 @@ def run_analysis(
         "climate": climate_result,
         "decision_tree": decision_tree_result,
         "total_pixels": int(total_pixels),
-
         "land_cover": {
             "water": round((water / total_pixels) * 100, 2),
             "bare": round((barren / total_pixels) * 100, 2),
@@ -1060,7 +1098,7 @@ def run_analysis(
         # ==================================================
 
         "cnn_landcover": cnn_result,
-
+        "location_evaluation": location_evaluation,
         # ==================================================
         # BUSH DENSITY ASSESSMENT
         # ==================================================
