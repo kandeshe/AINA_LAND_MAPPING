@@ -1,4 +1,5 @@
 from pathlib import Path
+import re
 
 from llama_cpp import Llama
 
@@ -155,37 +156,43 @@ class AIAdvisor:
 
 
         # -----------------------------------------------------
-        # Decision Tree prediction
+        # Normalize recommendations so every variable exists.
+        # This prevents NameError when recommendation generation
+        # fails or returns an unexpected value.
         # -----------------------------------------------------
 
-        try:
+        if not isinstance(recommendations, dict):
+            recommendations = {}
 
-            # Use the Decision Tree result already calculated
-            # by main.py during the completed analysis.
-            decision_tree_result = analysis.get(
-                "decision_tree",
-                {}
-            )
+        crops = recommendations.get("crops") or []
+        vegetables = recommendations.get("vegetables") or []
+        soil_rehabilitation = recommendations.get("soil_rehabilitation") or []
 
-            if not isinstance(
-                decision_tree_result,
-                dict
-            ):
-                decision_tree_result = {}
+        if isinstance(crops, str):
+            crops = [crops]
+        if isinstance(vegetables, str):
+            vegetables = [vegetables]
+        if isinstance(soil_rehabilitation, str):
+            soil_rehabilitation = [soil_rehabilitation]
 
-        except Exception as e:
+        # -----------------------------------------------------
+        # Reuse Decision Tree result from this analysis when
+        # available. Otherwise, calculate it as a fallback.
+        # -----------------------------------------------------
 
-            print(
-                "Decision Tree result retrieval error:",
-                e
-            )
+        decision_tree_result = analysis.get("decision_tree")
 
-            decision_tree_result = {
-                "available": False,
-                "prediction": None,
-                "confidence": None,
-                "features": {}
-            }
+        if not isinstance(decision_tree_result, dict) or not decision_tree_result.get("available"):
+            try:
+                decision_tree_result = decision_tree.predict(analysis)
+            except Exception as e:
+                print("Decision Tree prediction error:", e)
+                decision_tree_result = {
+                    "available": False,
+                    "prediction": None,
+                    "confidence": None
+                }
+
 
         # =====================================================
         # QUESTION TYPE DETECTION
@@ -279,37 +286,6 @@ class AIAdvisor:
 
             return self._decision_tree_answer(
                 analysis,
-                decision_tree_result
-            )
-
-
-        # -----------------------------------------------------
-        # Normal crop question
-        #
-        # Use the Decision Tree as an actual decision signal.
-        # Existing LARA crop rules remain the environmental
-        # screening layer. Phi-3 does not choose the crop here.
-        # -----------------------------------------------------
-
-        crop_keywords = [
-            "crop",
-            "crops",
-            "what crop",
-            "which crop",
-            "what crops",
-            "which crops",
-            "what should i grow",
-            "what can i grow",
-            "which crop should i grow"
-        ]
-
-        if any(
-            keyword in q
-            for keyword in crop_keywords
-        ):
-            return self._hybrid_crop_answer(
-                analysis,
-                crops,
                 decision_tree_result
             )
 
@@ -432,6 +408,66 @@ class AIAdvisor:
             )
 
 
+        # -----------------------------------------------------
+        # Normal crop question
+        # -----------------------------------------------------
+
+        crop_keywords = [
+
+            "crop",
+
+            "crops",
+
+            "what crop",
+
+            "which crop",
+
+            "what crops",
+
+            "which crops",
+
+            "what should i grow",
+
+            "what can i grow",
+
+            "which crop should i grow"
+
+        ]
+
+
+        if any(
+
+            keyword in q
+
+            for keyword in crop_keywords
+
+        ):
+
+            context = self._build_context(
+
+                analysis,
+
+                crops,
+
+                vegetables,
+
+                soil_rehabilitation,
+
+                decision_tree_result
+
+            )
+
+            return self._generate_agricultural_ai_response(
+
+                question,
+
+                context,
+
+                focus="crops"
+
+            )
+
+
         # =====================================================
         # BUILD LAND CONTEXT
         # =====================================================
@@ -534,9 +570,12 @@ FARMER QUESTION
 {question}
 
 
-Answer using the supplied LARA analysis.
-
-Give a clear, practical answer.
+Answer the farmer's question directly in the first sentence.
+Do not repeat or paraphrase the question as the opening sentence.
+Do not output prompt headings such as FARMER QUESTION, USER QUESTION,
+Answer:, or Assistant:. Provide the actual answer, then briefly explain why.
+If a required value is missing, say what cannot be determined and answer
+what can be answered from the available data.
 
 """
 
@@ -590,17 +629,10 @@ Give a clear, practical answer.
             )
 
 
-            answer = response[
-                "choices"
-            ][0][
-                "message"
-            ][
-                "content"
-            ].strip()
-
+            answer = response["choices"][0]["message"]["content"] or ""
+            answer = self._clean_model_answer(answer, question)
 
             if answer:
-
                 return answer
 
 
@@ -844,12 +876,8 @@ Give a clear, practical answer.
                     ]
                 )
 
-                answer = (
-                    response["choices"][0]
-                    ["message"]
-                    ["content"]
-                    .strip()
-                )
+                answer = response["choices"][0]["message"]["content"] or ""
+                answer = self._clean_model_answer(answer, question)
 
                 if answer:
                     return answer
@@ -889,6 +917,60 @@ Give a clear, practical answer.
                 "the current land analysis, but the detailed AI "
                 "explanation is temporarily unavailable."
             )
+
+    # =========================================================
+    # CLEAN MODEL OUTPUT
+    # =========================================================
+
+    def _clean_model_answer(self, text, question=""):
+        """Remove prompt labels/question echoes from model output."""
+        if not isinstance(text, str):
+            return ""
+
+        answer = text.strip()
+        if not answer:
+            return ""
+
+        # Remove common role/prompt prefixes the model may echo.
+        answer = re.sub(
+            r"(?im)^\s*(?:assistant|answer|response)\s*:\s*",
+            "",
+            answer
+        ).strip()
+
+        # If the model starts by repeating the exact question, remove it.
+        question_clean = str(question or "").strip().strip('"\' ')
+        if question_clean:
+            while answer and answer[:len(question_clean)].casefold() == question_clean.casefold():
+                answer = answer[len(question_clean):].lstrip(" \t\r\n:-")
+
+        # Remove a repeated question heading plus the question itself.
+        answer = re.sub(
+            r"(?is)^\s*(?:farmer\s+question|user\s+question|question)\s*:\s*"
+            r".*?(?:\n\s*\n|\n(?=[A-Z<]))",
+            "",
+            answer,
+            count=1
+        ).strip()
+
+        # Remove remaining model role markers and tidy whitespace.
+        answer = re.sub(r"(?im)^\s*(?:assistant|user)\s*:\s*", "", answer)
+        answer = "\n".join(line.strip() for line in answer.splitlines() if line.strip())
+
+        # A response that is only the question (or a prompt label) is not an answer.
+        normalized_answer = re.sub(r"[^a-z0-9]+", " ", answer.casefold()).strip()
+        normalized_question = re.sub(r"[^a-z0-9]+", " ", question_clean.casefold()).strip()
+
+        if not normalized_answer or normalized_answer in {
+            "answer", "response", "farmer question", "user question"
+        }:
+            return ""
+
+        if normalized_question and normalized_answer == normalized_question:
+            return ""
+
+        return answer
+
 
     # =========================================================
     # BUILD CONTEXT
@@ -1317,220 +1399,6 @@ SOIL REHABILITATION
 {rehabilitation_text}
 
 """
-
-
-    # =========================================================
-    # HYBRID CROP DECISION
-    # =========================================================
-
-    def _hybrid_crop_answer(
-        self,
-        analysis,
-        crops,
-        decision_tree_result
-    ):
-        """
-        Give a natural farmer-facing crop recommendation while
-        keeping the Decision Tree as an explicit supporting
-        decision model and the existing LARA rules as the
-        environmental screening layer.
-        """
-
-        result = (
-            decision_tree_result
-            if isinstance(decision_tree_result, dict)
-            else {}
-        )
-
-        prediction = result.get("prediction")
-        confidence = result.get("confidence")
-
-        candidates = []
-
-        if isinstance(crops, list):
-            for crop in crops:
-                name = str(crop).strip()
-                if name and name not in candidates:
-                    candidates.append(name)
-
-        final_crop = None
-        tree_agrees = False
-
-        # Prefer the Decision Tree when its prediction is also
-        # present in the existing LARA recommendation list.
-        if prediction:
-            predicted = str(prediction).strip().lower()
-
-            for candidate in candidates:
-                current = candidate.lower()
-                if (
-                    current == predicted
-                    or predicted in current
-                    or current in predicted
-                ):
-                    final_crop = candidate
-                    tree_agrees = True
-                    break
-
-        # If the tree and rule layer do not overlap, keep the
-        # existing LARA recommendation rather than inventing a crop.
-        if final_crop is None and candidates:
-            final_crop = candidates[0]
-
-        soil = analysis.get("soil", {})
-        if not isinstance(soil, dict):
-            soil = {}
-
-        rainfall = analysis.get("rainfall")
-        temperature = analysis.get("temperature")
-        ph = soil.get("ph")
-        ndvi = analysis.get("mean_ndvi")
-        flood = analysis.get("flood_risk")
-        sand = soil.get("sand")
-
-        # ---------------------------------------------------------
-        # Build a short, natural explanation from actual values.
-        # ---------------------------------------------------------
-
-        reasons = []
-
-        if rainfall is not None:
-            try:
-                rain = float(rainfall)
-                if rain < 300:
-                    reasons.append(
-                        f"the current rainfall estimate is quite low at {rain:.1f} mm, so a lower-water crop is more sensible"
-                    )
-                elif rain <= 800:
-                    reasons.append(
-                        f"the current rainfall estimate is about {rain:.1f} mm, which is within a range used by LARA for several field crops"
-                    )
-                else:
-                    reasons.append(
-                        f"the current rainfall estimate is about {rain:.1f} mm, so water availability is less of a limiting signal"
-                    )
-            except (TypeError, ValueError):
-                pass
-
-        if ph is not None:
-            try:
-                p = float(ph)
-                if p < 5.5:
-                    reasons.append(
-                        f"the soil is acidic at pH {p:.2f}"
-                    )
-                elif p <= 7.5:
-                    reasons.append(
-                        f"the soil pH is {p:.2f}, which is in a broadly suitable range"
-                    )
-                else:
-                    reasons.append(
-                        f"the soil is slightly alkaline at pH {p:.2f}"
-                    )
-            except (TypeError, ValueError):
-                pass
-
-        if flood not in (None, "", "Not available"):
-            flood_text = str(flood).strip().lower()
-            if flood_text == "low":
-                reasons.append("the current flood-risk assessment is low")
-            else:
-                reasons.append(
-                    f"the current flood-risk assessment is {flood_text}"
-                )
-
-        if sand is not None:
-            try:
-                sand_value = float(sand)
-                if sand_value >= 40:
-                    reasons.append(
-                        f"the soil is relatively sandy at {sand_value:.1f}%"
-                    )
-            except (TypeError, ValueError):
-                pass
-
-        if ndvi is not None:
-            try:
-                ndvi_value = float(ndvi)
-                if ndvi_value < 0.2:
-                    reasons.append(
-                        f"the current vegetation signal is low (NDVI {ndvi_value:.3f})"
-                    )
-                elif ndvi_value >= 0.5:
-                    reasons.append(
-                        f"the current vegetation signal is relatively strong (NDVI {ndvi_value:.3f})"
-                    )
-            except (TypeError, ValueError):
-                pass
-
-        # ---------------------------------------------------------
-        # Farmer-facing response
-        # ---------------------------------------------------------
-
-        if final_crop:
-            html = (
-                "<b>🌱 My recommendation</b><br><br>"
-                f"Looking at the LARA analysis for this field, "
-                f"I'd lean toward <b>{final_crop}</b>."
-            )
-
-            if reasons:
-                # Keep the answer conversational rather than turning
-                # every factor into a technical bullet list.
-                if len(reasons) == 1:
-                    reason_text = reasons[0] + "."
-                elif len(reasons) == 2:
-                    reason_text = reasons[0] + ", and " + reasons[1] + "."
-                else:
-                    reason_text = ", ".join(reasons[:-1]) + ", and " + reasons[-1] + "."
-
-                html += (
-                    " The main reason is that "
-                    + reason_text
-                )
-
-            if prediction:
-                if tree_agrees:
-                    html += (
-                        " The Decision Tree also points to "
-                        + str(prediction)
-                        + ", so the machine-learning result and LARA's environmental screening are in agreement."
-                    )
-                else:
-                    html += (
-                        " The Decision Tree points to "
-                        + str(prediction)
-                        + ", but that crop is not in the current LARA recommendation list, so I have kept the LARA screening result rather than forcing the model's choice."
-                    )
-
-            alternatives = []
-            for crop in candidates:
-                if crop.lower() == str(final_crop).lower():
-                    continue
-                alternatives.append(crop)
-                if len(alternatives) >= 2:
-                    break
-
-            if alternatives:
-                html += (
-                    " Based on the same analysis, "
-                    + ", ".join(alternatives)
-                    + " would be the next options to consider."
-                )
-
-            html += (
-                "<br><br><b>One caution:</b> this is a model-based recommendation, "
-                "not a guarantee of yield. In particular, actual seasonal rainfall, "
-                "water access and field conditions should be checked before planting."
-            )
-
-            return html
-
-        return (
-            "<b>🌱 Crop recommendation</b><br><br>"
-            "I don't have enough usable LARA crop information to make a reliable "
-            "recommendation for this field yet."
-        )
 
 
     # =========================================================
